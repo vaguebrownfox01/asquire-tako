@@ -2,6 +2,8 @@
 import createDataContext from "../createDataContext";
 import { v4 as uuid } from "uuid";
 
+import { questions } from "../../appconfig/content/questions";
+
 export const fields = [
 	{
 		id: "Name",
@@ -37,23 +39,75 @@ const subjectInitialState = {
 	subjectAge: "",
 	subjectWeight: "",
 	subjectHeight: "",
-	subjectId: "",
+	subjectId: "x",
+	infoDone: true,
+
+	allQuestions: null,
+	currentQuestion: {},
+	previousQs: [],
+	answers: {},
+	questionDone: true,
+
 	fields,
 };
 
-// Subjects Attributes
-const typicalSubject = {
-	subjectName: "",
-	subjectId: "",
-};
+// Sample Question
+// let qs = {
+// 	1: {
+// 		qno: 1,
+// 		question: "What is your smoking status?",
+// 		options: ["Ex-smoker(1 year)", "Current smoker", "Non-smoker"],
+// 		nextQnos: [2],
+// 	},
+// };
+// Answer
+// let a = {
+// 	1: {
+// 		question: "text",
+// 		answer: "text",
+// 	},
+// };
 
 // Reducer
 const subjectReducer = (state, action) => {
-	switch (action.type) {
+	const { type, payload } = action;
+	switch (type) {
 		case "SET_LOADING":
-			return { ...state, loading: action.payload };
+			return { ...state, loading: payload };
+
 		case "SET_INFO":
-			return { ...state, [action.payload.field]: action.payload.value };
+			const { field, value } = payload;
+			return { ...state, [field]: value };
+
+		case "SET_QUESTION":
+			return { ...state, ...payload };
+
+		case "SET_QUESTION_NEXT":
+			const { nextQno, question } = payload;
+			const _qdone = nextQno === -1;
+
+			return {
+				...state,
+				questionDone: _qdone,
+				previousQs: [...state.previousQs, question],
+				currentQuestion:
+					state.allQuestions[nextQno] || state.currentQuestion,
+			};
+
+		case "SET_QUESTION_PREV":
+			let _previousQs = [...state.previousQs];
+			if (_previousQs.length < 1) {
+				return { ...state, questionDone: false };
+			}
+
+			const _currentQuestion = _previousQs.pop();
+			return {
+				...state,
+				questionDone: false,
+				previousQs: [..._previousQs],
+				currentQuestion: _currentQuestion,
+			};
+
 		default:
 			return state;
 	}
@@ -70,17 +124,51 @@ const subjectLoadAction = (dispatch) => {
 	};
 };
 
-const subjectInfoAction = (dispatch) => {
-	return ({ field, value }) => {
+const subjectSetQuestionAction = (dispatch) => {
+	return () => {
 		dispatch({ type: "SET_LOADING", payload: true });
 
-		let { f, v } = formatFieldValue({ field, value });
+		let payload = {
+			allQuestions: questions,
+			currentQuestion: questions[1],
+		};
 
-		console.log({ f, v });
-
-		dispatch({ type: "SET_INFO", payload: { field: f, value: v } });
+		dispatch({ type: "SET_QUESTION", payload: payload });
 
 		dispatch({ type: "SET_LOADING", payload: false });
+	};
+};
+
+const subjectInfoAction = (dispatch) => {
+	return ({ field, value }) => {
+		let { f, v } = formatFieldValue({ field, value });
+
+		dispatch({ type: "SET_INFO", payload: { field: f, value: v } });
+	};
+};
+
+const subjectSubmitAction = (dispatch) => {
+	return ({ question, answer, next }) => {
+		if (next) {
+			let nextQno = null;
+			if (
+				question.nextQnos.length === 1 ||
+				answer.answer === question.options[0]
+			) {
+				nextQno = question.nextQnos[0];
+			} else {
+				nextQno = question.nextQnos[1];
+			}
+
+			let payload = {
+				nextQno,
+				question: { ...question, answer: answer.answer },
+			};
+
+			dispatch({ type: "SET_QUESTION_NEXT", payload });
+		} else {
+			dispatch({ type: "SET_QUESTION_PREV", payload: null });
+		}
 	};
 };
 
@@ -106,6 +194,8 @@ export const { Context, Provider } = createDataContext(
 	{
 		subjectLoadAction,
 		subjectInfoAction,
+		subjectSetQuestionAction,
+		subjectSubmitAction,
 	},
 	subjectInitialState
 );
