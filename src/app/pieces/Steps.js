@@ -8,17 +8,20 @@ import Button from "@mui/material/Button";
 import Paper from "@mui/material/Paper";
 import Typography from "@mui/material/Typography";
 import SubjectID from "./SubjectID";
+import QuestionStep from "./QuestionStep";
+
+import { Context as SubjectContext } from "../state/data/SubjectContext";
 
 const steps = [
 	{
-		label: "Subject ID",
+		label: "Subject Info",
 		description: `create id`,
 		component: <SubjectID />,
 	},
 	{
 		label: "Questionnaire",
 		description: "meta data",
-		component: <p>{`Meta Data collection, Fill survey form`}</p>,
+		component: <QuestionStep />,
 	},
 	{
 		label: "Record",
@@ -28,11 +31,29 @@ const steps = [
 ];
 
 const Steps = React.memo(function Steps() {
+	const { state: subjectState } = React.useContext(SubjectContext);
 	const [activeStep, setActiveStep] = React.useState(0);
+
+	const [disable, setDisable] = React.useState(true);
 
 	const handleNext = () => {
 		setActiveStep((prevActiveStep) => prevActiveStep + 1);
 	};
+
+	React.useEffect(() => {
+		switch (activeStep) {
+			case 0:
+				setDisable(!subjectState.infoDone);
+				break;
+
+			case 1:
+				setDisable(!subjectState.questionDone);
+				break;
+			default:
+				setDisable(true);
+				break;
+		}
+	}, [subjectState]);
 
 	const handleBack = () => {
 		setActiveStep((prevActiveStep) => prevActiveStep - 1);
@@ -55,7 +76,7 @@ const Steps = React.memo(function Steps() {
 						<StepContent>
 							<>{step.component}</>
 							<StepButtons
-								{...{ index, handleNext, handleBack }}
+								{...{ index, handleNext, handleBack, disable }}
 							/>
 						</StepContent>
 					</Step>
@@ -77,23 +98,24 @@ const Steps = React.memo(function Steps() {
 
 export default Steps;
 
-const StepButtons = ({ index, handleNext, handleBack }) => {
+const StepButtons = ({ index, handleNext, handleBack, disable }) => {
 	return (
 		<Box sx={{ mb: 2 }}>
 			<div>
-				<Button
-					variant="contained"
-					onClick={handleNext}
-					sx={{ mt: 1, mr: 1 }}
-				>
-					{index === steps.length - 1 ? "Finish" : "Continue"}
-				</Button>
 				<Button
 					disabled={index === 0}
 					onClick={handleBack}
 					sx={{ mt: 1, mr: 1 }}
 				>
 					Back
+				</Button>
+				<Button
+					variant="contained"
+					disabled={disable}
+					onClick={handleNext}
+					sx={{ mt: 1, mr: 1 }}
+				>
+					{index === steps.length - 1 ? "Finish" : "Continue"}
 				</Button>
 			</div>
 		</Box>
