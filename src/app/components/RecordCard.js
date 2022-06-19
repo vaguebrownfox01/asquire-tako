@@ -1,5 +1,12 @@
 import * as React from "react";
-import { Box, Card, CardContent, IconButton, Typography } from "@mui/material";
+import {
+	Box,
+	Card,
+	CardContent,
+	CardMedia,
+	IconButton,
+	Typography,
+} from "@mui/material";
 import RadioButtonCheckedIcon from "@mui/icons-material/RadioButtonChecked";
 import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
@@ -9,6 +16,7 @@ const classes = {
 		display: "flex",
 		justifyContent: "space-around",
 		marginTop: t.spacing(2),
+		transform: "scale(1.2)",
 	}),
 };
 const RecordCard = React.memo(function RecordCard() {
@@ -23,15 +31,20 @@ const RecordCard = React.memo(function RecordCard() {
 				>
 					How are you?
 				</Typography>
-
+				<CardMedia
+					sx={{ height: 128, width: 128, margin: "auto" }}
+					component="img"
+					image="/image/icon_1024.png"
+					alt="Paella dish"
+				></CardMedia>
 				<Box sx={classes.buttonRoot}>
-					<IconButton>
+					<IconButton size="large">
 						<ArrowBackIosIcon />
 					</IconButton>
-					<IconButton>
+					<IconButton size="large">
 						<RadioButtonCheckedIcon color="secondary" />
 					</IconButton>
-					<IconButton>
+					<IconButton size="large">
 						<ArrowForwardIosIcon />
 					</IconButton>
 				</Box>

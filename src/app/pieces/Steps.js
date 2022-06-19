@@ -33,7 +33,7 @@ const steps = [
 
 const Steps = React.memo(function Steps() {
 	const { state: subjectState } = React.useContext(SubjectContext);
-	const [activeStep, setActiveStep] = React.useState(0);
+	const [activeStep, setActiveStep] = React.useState(2);
 
 	const [disable, setDisable] = React.useState(true);
 
@@ -101,7 +101,7 @@ export default Steps;
 
 const StepButtons = ({ index, handleNext, handleBack, disable }) => {
 	return (
-		<Box sx={{ mb: 2 }}>
+		<Box sx={{ mb: 2, paddingTop: 2 }}>
 			<div>
 				<Button
 					disabled={index === 0}
