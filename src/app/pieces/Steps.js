@@ -7,8 +7,9 @@ import StepContent from "@mui/material/StepContent";
 import Button from "@mui/material/Button";
 import Paper from "@mui/material/Paper";
 import Typography from "@mui/material/Typography";
-import SubjectID from "./SubjectID";
+import InfoStep from "./InfoStep";
 import QuestionStep from "./QuestionStep";
+import RecordStep from "./RecordStep";
 
 import { Context as SubjectContext } from "../state/data/SubjectContext";
 
@@ -16,7 +17,7 @@ const steps = [
 	{
 		label: "Subject Info",
 		description: `create id`,
-		component: <SubjectID />,
+		component: <InfoStep />,
 	},
 	{
 		label: "Questionnaire",
@@ -26,7 +27,7 @@ const steps = [
 	{
 		label: "Record",
 		description: `audio record`,
-		component: <p>{`Record and Upload the audio`}</p>,
+		component: <RecordStep />,
 	},
 ];
 

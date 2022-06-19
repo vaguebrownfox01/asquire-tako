@@ -29,6 +29,19 @@ export const fields = [
 		type: "number",
 		field: "subjectWeight",
 	},
+	{
+		id: "Gender",
+		label: "Gender",
+		type: "menu",
+		field: "subjectGender",
+	},
+];
+
+const genders = [
+	{ label: "Select", value: "" },
+	{ label: "Male", value: "Male" },
+	{ label: "Female", value: "Female" },
+	{ label: "Other", value: "Other" },
 ];
 
 // Initial State
@@ -39,6 +52,7 @@ const subjectInitialState = {
 	subjectAge: "",
 	subjectWeight: "",
 	subjectHeight: "",
+	subjectGender: "",
 	subjectId: "x",
 	infoDone: true,
 
@@ -49,6 +63,7 @@ const subjectInitialState = {
 	questionDone: true,
 
 	fields,
+	genders,
 };
 
 // Sample Question
@@ -58,13 +73,6 @@ const subjectInitialState = {
 // 		question: "What is your smoking status?",
 // 		options: ["Ex-smoker(1 year)", "Current smoker", "Non-smoker"],
 // 		nextQnos: [2],
-// 	},
-// };
-// Answer
-// let a = {
-// 	1: {
-// 		question: "text",
-// 		answer: "text",
 // 	},
 // };
 
