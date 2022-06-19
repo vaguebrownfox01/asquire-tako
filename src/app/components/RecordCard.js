@@ -10,6 +10,7 @@ import {
 import RadioButtonCheckedIcon from "@mui/icons-material/RadioButtonChecked";
 import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
+
 const classes = {
 	cardRoot: (t) => ({ margin: t.spacing("auto", 2, 0) }),
 	buttonRoot: (t) => ({
@@ -19,6 +20,7 @@ const classes = {
 		transform: "scale(1.2)",
 	}),
 };
+
 const RecordCard = React.memo(function RecordCard() {
 	return (
 		<Card>
