@@ -11,6 +11,8 @@ exports.CONTENT_COLLECTION = "content";
 exports.STIM_DOC = "stimulus";
 exports.SURVEY_DOC = "survey";
 
+exports.SUB_STATE = "/state/current";
+
 // Storage
 exports.STORAGE_BUCKET = "tako-vrx.appspot.com";
 

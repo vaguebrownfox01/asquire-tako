@@ -3,6 +3,7 @@ import createDataContext from "../createDataContext";
 import { v4 as uuid } from "uuid";
 
 import { questions } from "../../appconfig/content/questions";
+import { firebaseCurrentSubjectState } from "../../../firebase/client/firestore";
 
 export const fields = [
 	{
@@ -47,7 +48,6 @@ const genders = [
 // Initial State
 const subjectInitialState = {
 	loading: false,
-	error: "",
 	subjectName: "",
 	subjectAge: "",
 	subjectWeight: "",
@@ -183,6 +183,16 @@ const subjectSubmitAction = (dispatch) => {
 	};
 };
 
+const subjectFirebaseUpdateAction = (dispatch) => {
+	return ({ subjectState }) => {
+		dispatch({ type: "SET_LOADING", payload: true });
+
+		firebaseCurrentSubjectState({ subjectState });
+
+		dispatch({ type: "SET_LOADING", payload: false });
+	};
+};
+
 // Helpers
 const formatFieldValue = ({ field, value }) => {
 	switch (field) {
@@ -208,6 +218,8 @@ const { Context: SubjectContext, Provider: SubjectProvider } =
 			subjectInfoAction,
 			subjectSetQuestionAction,
 			subjectSubmitAction,
+
+			subjectFirebaseUpdateAction,
 		},
 		subjectInitialState
 	);

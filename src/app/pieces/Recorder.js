@@ -12,6 +12,8 @@ import {
 import * as React from "react";
 import ReactMarkdown from "react-markdown";
 import { RecordContext } from "../state/data/RecordContext";
+import { useDocumentData } from "react-firebase-hooks/firestore";
+import { currentSubQuery } from "../../firebase/client/firestore";
 
 const classes = {
 	boxRoot: {
@@ -51,6 +53,8 @@ const Recorder = React.memo(function Recorder({ subjectInfo }) {
 		recordStopAction,
 	} = React.useContext(RecordContext);
 
+	const [currSubState, loading, error] = useDocumentData(currentSubQuery);
+
 	const playerRef = React.useRef();
 	const vizRef = React.useRef();
 	const timeoutRef = React.useRef();
@@ -78,6 +82,7 @@ const Recorder = React.memo(function Recorder({ subjectInfo }) {
 		<Box sx={classes.boxRoot}>
 			<Card ref={vizRef}>
 				<CardContent sx={classes.cardRoot}>
+					<Typography>{currSubState?.subjectName}</Typography>
 					<Typography
 						sx={{ textAlign: "center" }}
 						variant="h6"

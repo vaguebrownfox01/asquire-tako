@@ -32,14 +32,12 @@ const steps = [
 ];
 
 const Steps = React.memo(function Steps() {
-	const { state: subjectState } = React.useContext(SubjectContext);
-	const [activeStep, setActiveStep] = React.useState(2);
+	const { state: subjectState, subjectFirebaseUpdateAction } =
+		React.useContext(SubjectContext);
+
+	const [activeStep, setActiveStep] = React.useState(0);
 
 	const [disable, setDisable] = React.useState(true);
-
-	const handleNext = () => {
-		setActiveStep((prevActiveStep) => prevActiveStep + 1);
-	};
 
 	React.useEffect(() => {
 		switch (activeStep) {
@@ -55,6 +53,11 @@ const Steps = React.memo(function Steps() {
 				break;
 		}
 	}, [subjectState]);
+
+	const handleNext = () => {
+		setActiveStep((prevActiveStep) => prevActiveStep + 1);
+		subjectFirebaseUpdateAction({ subjectState });
+	};
 
 	const handleBack = () => {
 		setActiveStep((prevActiveStep) => prevActiveStep - 1);
