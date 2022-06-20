@@ -8,8 +8,8 @@ exports.VERSION = "00";
 exports.DATABASE_URL =
 	"https://tako-vrx-default-rtdb.asia-southeast1.firebasedatabase.app";
 exports.CONTENT_COLLECTION = "content";
-exports.STIM_DOC = "stimulus";
-exports.SURVEY_DOC = "survey";
+exports.STIM_DOC = `/${this.CONTENT_COLLECTION}/stimulus`;
+exports.SURVEY_DOC = `/${this.CONTENT_COLLECTION}/survey`;
 
 exports.SUB_STATE = "/state/current";
 

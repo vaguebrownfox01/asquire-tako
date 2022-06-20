@@ -1,9 +1,11 @@
 import { db } from "../creds/client";
 
-import { collection, addDoc, updateDoc, doc } from "firebase/firestore";
-import { SUB_STATE } from "../creds/setup";
+import { doc, updateDoc } from "firebase/firestore";
+import { STIM_DOC, SUB_STATE, SURVEY_DOC } from "../creds/setup";
 
 export const currentSubQuery = doc(db, SUB_STATE);
+export const questionsQuery = doc(db, "/content/survey");
+export const stimulusQuery = doc(db, STIM_DOC);
 
 export const firebaseCurrentSubjectState = async ({ subjectState }) => {
 	await updateDoc(doc(db, SUB_STATE), subjectState).catch((err) => {
