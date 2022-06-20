@@ -1,21 +1,14 @@
 import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 import RadioButtonCheckedIcon from "@mui/icons-material/RadioButtonChecked";
-import {
-	Box,
-	Card,
-	CardContent,
-	CardMedia,
-	IconButton,
-	Typography,
-} from "@mui/material";
+import { Box, Card, CardContent, IconButton } from "@mui/material";
+import { Container } from "@mui/system";
 import * as React from "react";
-import ReactMarkdown from "react-markdown";
-import { RecordContext } from "../state/data/RecordContext";
 import { useDocumentData } from "react-firebase-hooks/firestore";
 import { currentSubQuery } from "../../firebase/client/firestore";
 import InfoDisplay from "../components/InfoDisplay";
-import { Container } from "@mui/system";
+import StimCard from "../components/StimCard";
+import { RecordContext } from "../state/data/RecordContext";
 
 const classes = {
 	boxRoot: {
@@ -55,7 +48,7 @@ const Recorder = React.memo(function Recorder({ subjectInfo }) {
 		recordStopAction,
 	} = React.useContext(RecordContext);
 
-	const [currSubState, loading, error] = useDocumentData(currentSubQuery);
+	const [currSubState] = useDocumentData(currentSubQuery);
 
 	const playerRef = React.useRef();
 	const vizRef = React.useRef();
@@ -84,23 +77,9 @@ const Recorder = React.memo(function Recorder({ subjectInfo }) {
 		<Container maxWidth="sm">
 			<Box sx={classes.boxRoot}>
 				{currSubState && <InfoDisplay info={currSubState} />}
+				<StimCard subjectInfo={subInf} />
 				<Card ref={vizRef}>
 					<CardContent sx={classes.cardRoot}>
-						<Typography
-							sx={{ textAlign: "center" }}
-							variant="h6"
-							component="div"
-							gutterBottom
-						>
-							<ReactMarkdown>{subInf.description}</ReactMarkdown>
-						</Typography>
-
-						<CardMedia
-							sx={classes.imgRoot}
-							component="img"
-							image="/image/icon_1024.png"
-							alt="stim-image"
-						/>
 						<AudioPlayer {...{ playerRef }} />
 						<>
 							<Box sx={classes.buttonRoot}>
