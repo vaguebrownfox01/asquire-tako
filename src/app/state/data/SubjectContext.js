@@ -200,13 +200,16 @@ const getId = (name = "") => {
 };
 
 // Export
-export const { Context, Provider } = createDataContext(
-	subjectReducer,
-	{
-		subjectLoadAction,
-		subjectInfoAction,
-		subjectSetQuestionAction,
-		subjectSubmitAction,
-	},
-	subjectInitialState
-);
+const { Context: SubjectContext, Provider: SubjectProvider } =
+	createDataContext(
+		subjectReducer,
+		{
+			subjectLoadAction,
+			subjectInfoAction,
+			subjectSetQuestionAction,
+			subjectSubmitAction,
+		},
+		subjectInitialState
+	);
+
+export { SubjectProvider, SubjectContext };

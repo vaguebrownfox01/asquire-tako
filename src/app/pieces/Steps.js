@@ -11,7 +11,7 @@ import InfoStep from "./InfoStep";
 import QuestionStep from "./QuestionStep";
 import RecordStep from "./RecordStep";
 
-import { Context as SubjectContext } from "../state/data/SubjectContext";
+import { SubjectContext } from "../state/data/SubjectContext";
 
 const steps = [
 	{

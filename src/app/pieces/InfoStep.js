@@ -9,7 +9,7 @@ import {
 } from "@mui/material";
 import * as React from "react";
 
-import { Context as SubjectContext } from "../state/data/SubjectContext";
+import { SubjectContext } from "../state/data/SubjectContext";
 
 const classes = {
 	fieldRoot: (t) => ({ paddingTop: t.spacing(2) }),

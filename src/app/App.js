@@ -2,14 +2,18 @@ import * as React from "react";
 import Layout from "./components/Layout";
 import Recorder from "./pieces/Recorder";
 import Steps from "./pieces/Steps";
+import { RecordProvider } from "./state/data/RecordContext";
 
-import { Provider as SubjectProvider } from "./state/data/SubjectContext";
+import { SubjectProvider } from "./state/data/SubjectContext";
 
 const App = React.memo(function App() {
 	return (
 		<Layout>
 			<SubjectProvider>
-				<Recorder />
+				<RecordProvider>
+					<Steps />
+					<Recorder />
+				</RecordProvider>
 			</SubjectProvider>
 		</Layout>
 	);

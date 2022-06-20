@@ -25,31 +25,35 @@ const RecordCard = React.memo(function RecordCard() {
 	return (
 		<Card>
 			<CardContent sx={classes.cardRoot}>
-				<Typography
-					sx={{ textAlign: "center" }}
-					variant="h6"
-					component="div"
-					gutterBottom
-				>
-					How are you?
-				</Typography>
-				<CardMedia
-					sx={{ height: 128, width: 128, margin: "auto" }}
-					component="img"
-					image="/image/icon_1024.png"
-					alt="Paella dish"
-				></CardMedia>
-				<Box sx={classes.buttonRoot}>
-					<IconButton size="large">
-						<ArrowBackIosIcon />
-					</IconButton>
-					<IconButton size="large">
-						<RadioButtonCheckedIcon color="secondary" />
-					</IconButton>
-					<IconButton size="large">
-						<ArrowForwardIosIcon />
-					</IconButton>
-				</Box>
+				<>
+					<Typography
+						sx={{ textAlign: "center" }}
+						variant="h6"
+						component="div"
+						gutterBottom
+					>
+						How are you?
+					</Typography>
+					<CardMedia
+						sx={{ height: 128, width: 128, margin: "auto" }}
+						component="img"
+						image="/image/icon_1024.png"
+						alt="Paella dish"
+					></CardMedia>
+				</>
+				<>
+					<Box sx={classes.buttonRoot}>
+						<IconButton size="large">
+							<ArrowBackIosIcon />
+						</IconButton>
+						<IconButton size="large">
+							<RadioButtonCheckedIcon color="secondary" />
+						</IconButton>
+						<IconButton size="large">
+							<ArrowForwardIosIcon />
+						</IconButton>
+					</Box>
+				</>
 			</CardContent>
 		</Card>
 	);

@@ -2,7 +2,7 @@ import { Box } from "@mui/material";
 import * as React from "react";
 import QuestionCard from "../components/QuestionCard";
 
-import { Context as SubjectContext } from "../state/data/SubjectContext";
+import { SubjectContext } from "../state/data/SubjectContext";
 
 const QuestionStep = React.memo(function QuestionStep() {
 	const {

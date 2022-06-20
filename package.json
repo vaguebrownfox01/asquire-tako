@@ -16,7 +16,9 @@
     "react-dom": "^18.2.0",
     "react-firebase-hooks": "^5.0.3",
     "react-markdown": "^8.0.3",
+    "react-redux": "^8.0.2",
     "react-scripts": "5.0.1",
+    "standardized-audio-context": "^25.3.28",
     "uuid": "^8.3.2",
     "web-vitals": "^2.1.4"
   },
