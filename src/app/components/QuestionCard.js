@@ -86,7 +86,7 @@ const QuestionCard = React.memo(function QuestionCard({
 								</>
 							)}
 							<>
-								{question.options.length === 0 && (
+								{question?.options?.length === 0 && (
 									<TextField
 										id={`textinput-${question.qno}`}
 										sx={classes.textField}
