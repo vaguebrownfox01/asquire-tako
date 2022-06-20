@@ -53,21 +53,19 @@ const InfoStep = React.memo(function InfoStep() {
 		<Box sx={classes.fieldRoot}>
 			{subjectState.fields.map((f, i) =>
 				f.type !== "menu" ? (
-					<>
-						<TextField
-							key={f.id}
-							sx={classes.textField.bind({ i })}
-							id={f.id}
-							label={f.label}
-							type={f.type}
-							variant="outlined"
-							value={subjectState[f.field]}
-							onChange={handleFieldInput.bind({ field: f.field })}
-							autoComplete="off"
-						/>
-					</>
+					<TextField
+						key={`${f.id}-${i}`}
+						sx={classes.textField.bind({ i })}
+						id={f.id}
+						label={f.label}
+						type={f.type}
+						variant="outlined"
+						value={subjectState[f.field]}
+						onChange={handleFieldInput.bind({ field: f.field })}
+						autoComplete="off"
+					/>
 				) : (
-					<FormControl fullWidth>
+					<FormControl key={`${f.id}-${i}`} fullWidth>
 						<InputLabel id={`${f.id}-label`}>Gender</InputLabel>
 						<Select
 							sx={classes.selectMenu}
