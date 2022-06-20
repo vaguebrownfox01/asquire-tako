@@ -28,6 +28,9 @@ const classes = {
 		transform: "scale(1.2)",
 	}),
 	imgRoot: (t) => ({ height: 128, width: 128, margin: t.spacing(2, "auto") }),
+	playerShow: {
+		width: "100%",
+	},
 };
 const MAX_REC_DURATION = 121000;
 
@@ -105,10 +108,10 @@ export default Recorder;
 
 const AudioPlayer = React.memo(function AudioPlayer({ audioUrl, playerRef }) {
 	return (
-		<Box sx={{ margin: "auto" }}>
+		<Box>
 			<audio
 				ref={playerRef}
-				className={classes.playerShow}
+				style={classes.playerShow}
 				src={audioUrl}
 				controls
 			/>

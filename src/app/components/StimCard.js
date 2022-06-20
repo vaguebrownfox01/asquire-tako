@@ -1,4 +1,4 @@
-import { Box, Card, CardContent, CardMedia, Typography } from "@mui/material";
+import { Box, Card, CardContent, Typography } from "@mui/material";
 import * as React from "react";
 import ReactMarkdown from "react-markdown";
 
@@ -26,13 +26,6 @@ const StimCard = React.memo(function StimCard({ subjectInfo }) {
 					>
 						<ReactMarkdown>{description}</ReactMarkdown>
 					</Typography>
-
-					<CardMedia
-						sx={classes.imgRoot}
-						component="img"
-						image="/image/icon_1024.png"
-						alt="stim-image"
-					/>
 				</Box>
 			</CardContent>
 		</Card>

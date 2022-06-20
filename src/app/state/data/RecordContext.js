@@ -7,6 +7,7 @@ import {
 import { startVibrate } from "../../utils/vibrate";
 import createDataContext from "../createDataContext";
 import { batch } from "react-redux";
+import { firebaseCurrentSubjectState } from "../../../firebase/client/firestore";
 // Initial State
 const recordInitialState = {
 	loading: false,
@@ -155,12 +156,28 @@ const recordStopAction = (dispatch) => {
 	};
 };
 
+const recordSetRemoteStateAction = (dispatch) => {
+	return ({ subjectState, recordState }) => {
+		dispatch({ type: "SET_LOADING", payload: true });
+
+		firebaseCurrentSubjectState({
+			subjectState: { ...subjectState, ...recordState },
+		});
+
+		dispatch({ type: "SET_LOADING", payload: false });
+	};
+};
+
 // Export
 export const { Context: RecordContext, Provider: RecordProvider } =
 	createDataContext(
 		recordReducer,
 		{
 			recordLoadAction,
+			recordGetDevicesAction,
+			recordStartAction,
+			recordStopAction,
+			recordSetRemoteStateAction,
 		},
 		recordInitialState
 	);

@@ -63,7 +63,7 @@ const subjectInitialState = {
 	questionDone: false,
 
 	isRecording: false,
-	isRecordDone: false,
+	recDone: false,
 
 	fields,
 	genders,

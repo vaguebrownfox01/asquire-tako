@@ -7,9 +7,16 @@ import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 
 const InfoDisplay = React.memo(function InfoDisplay({ info }) {
-	const { subjectName, subjectGender, subjectAge, questionDone } = info;
+	const {
+		subjectName,
+		subjectGender,
+		subjectAge,
+		questionDone,
+		isRecording,
+	} = info;
 
-	const done = questionDone ? "done" : "not done";
+	const doneQ = questionDone ? "done" : "not done";
+	const doneR = isRecording ? "recording" : "not recording";
 	return (
 		<Card sx={{ marginBottom: 1 }}>
 			{subjectName && (
@@ -21,7 +28,9 @@ const InfoDisplay = React.memo(function InfoDisplay({ info }) {
 						{`${subjectGender}, ${subjectAge}y`}
 					</Typography>
 
-					<Typography variant="caption">{`Questionnaire: ${done}`}</Typography>
+					<Typography variant="caption">{`Questionnaire: ${doneQ}`}</Typography>
+					<br />
+					<Typography variant="caption">{`RecordingState: ${doneR}`}</Typography>
 				</CardContent>
 			)}
 		</Card>

@@ -2,6 +2,7 @@ import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 import RadioButtonCheckedIcon from "@mui/icons-material/RadioButtonChecked";
 import { Box, Card, CardContent, IconButton } from "@mui/material";
+import StopCircleIcon from "@mui/icons-material/StopCircle";
 import * as React from "react";
 
 const classes = {
@@ -14,19 +15,28 @@ const classes = {
 	}),
 };
 
-const RecordCard = React.memo(function RecordCard() {
+const RecordCard = React.memo(function RecordCard({ handleRecord }) {
 	return (
 		<Card>
 			<CardContent sx={classes.cardRoot}>
 				<>
 					<Box sx={classes.buttonRoot}>
-						<IconButton size="large">
+						<IconButton>
 							<ArrowBackIosIcon />
 						</IconButton>
-						<IconButton size="large">
+
+						<IconButton
+							onClick={handleRecord.bind({ action: "start" })}
+						>
 							<RadioButtonCheckedIcon color="secondary" />
 						</IconButton>
-						<IconButton size="large">
+						<IconButton
+							onClick={handleRecord.bind({ action: "stop" })}
+						>
+							<StopCircleIcon color="secondary" />
+						</IconButton>
+
+						<IconButton>
 							<ArrowForwardIosIcon />
 						</IconButton>
 					</Box>
