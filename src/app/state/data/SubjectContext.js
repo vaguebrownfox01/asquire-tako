@@ -1,8 +1,8 @@
 // user context
 import createDataContext from "../createDataContext";
-import { v4 as uuid } from "uuid";
+import { parse, v4 as uuid } from "uuid";
 
-import { questions } from "../../appconfig/content/questions";
+// import { questions } from "../../appconfig/content/questions";
 import { firebaseCurrentSubjectState } from "../../../firebase/client/firestore";
 
 export const fields = [
@@ -54,13 +54,13 @@ const subjectInitialState = {
 	subjectHeight: "",
 	subjectGender: "",
 	subjectId: "x",
-	infoDone: true,
+	infoDone: false,
 
 	allQuestions: null,
 	currentQuestion: {},
 	previousQs: [],
 	answers: {},
-	questionDone: true,
+	questionDone: false,
 
 	isRecording: false,
 	isRecordDone: false,
@@ -136,13 +136,16 @@ const subjectLoadAction = (dispatch) => {
 };
 
 const subjectSetQuestionAction = (dispatch) => {
-	return () => {
+	return ({ allQuestions }) => {
 		dispatch({ type: "SET_LOADING", payload: true });
 
-		let payload = {
-			allQuestions: questions,
-			currentQuestion: questions[1],
-		};
+		let payload = {};
+		if (allQuestions) {
+			payload = {
+				allQuestions: allQuestions,
+				currentQuestion: allQuestions[1],
+			};
+		}
 
 		dispatch({ type: "SET_QUESTION", payload: payload });
 
@@ -199,13 +202,23 @@ const formatFieldValue = ({ field, value }) => {
 		case "subjectName":
 			let name = value.replace(/[^a-zA-Z +]/g, "");
 			return { f: field, v: name };
+		case "subjectAge":
+			let age = Math.abs(parseInt(value) || 0) % 100;
+			return { f: field, v: `${age}` };
+		case "subjectHeight":
+			let height = Math.abs(parseInt(value) || 0) % 300;
+			return { f: field, v: `${height}` };
+		case "subjectWeight":
+			let weight = Math.abs(parseInt(value) || 0) % 200;
+			return { f: field, v: `${weight}` };
+
 		default:
 			return { f: field, v: value };
 	}
 };
 
 const getId = (name = "") => {
-	let id = name.replace(/[^a-zA-Z]/g, "").toLowerCase();
+	let id = name.replace(/[a-zA-Z]/g, "").toLowerCase();
 	return `${id}-${uuid().slice(0, 8)}`;
 };
 
