@@ -86,6 +86,9 @@ const subjectReducer = (state, action) => {
 		case "SET_LOADING":
 			return { ...state, loading: payload };
 
+		case "SET_ALL":
+			return { ...state, ...payload };
+
 		case "SET_INFO":
 			const { field, value } = payload;
 			return { ...state, [field]: value };
@@ -135,6 +138,16 @@ const subjectLoadAction = (dispatch) => {
 	};
 };
 
+const subjectSetAllInfoAction = (dispatch) => {
+	return ({ subjectState }) => {
+		dispatch({ type: "SET_LOADING", payload: true });
+
+		dispatch({ type: "SET_ALL", payload: subjectState });
+
+		dispatch({ type: "SET_LOADING", payload: false });
+	};
+};
+
 const subjectSetQuestionAction = (dispatch) => {
 	return ({ allQuestions }) => {
 		dispatch({ type: "SET_LOADING", payload: true });
@@ -144,6 +157,7 @@ const subjectSetQuestionAction = (dispatch) => {
 			payload = {
 				allQuestions: allQuestions,
 				currentQuestion: allQuestions[1],
+				// previousQs: [],
 			};
 		}
 
@@ -228,6 +242,7 @@ const { Context: SubjectContext, Provider: SubjectProvider } =
 		subjectReducer,
 		{
 			subjectLoadAction,
+			subjectSetAllInfoAction,
 			subjectInfoAction,
 			subjectSetQuestionAction,
 			subjectSubmitAction,

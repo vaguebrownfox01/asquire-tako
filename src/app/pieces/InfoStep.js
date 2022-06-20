@@ -7,6 +7,11 @@ import {
 	TextField,
 } from "@mui/material";
 import * as React from "react";
+import {
+	useDocumentData,
+	useDocumentDataOnce,
+} from "react-firebase-hooks/firestore";
+import { currentSubQuery } from "../../firebase/client/firestore";
 
 import { SubjectContext } from "../state/data/SubjectContext";
 
@@ -22,8 +27,13 @@ const classes = {
 };
 
 const InfoStep = React.memo(function InfoStep() {
-	const { state: subjectState, subjectInfoAction } =
-		React.useContext(SubjectContext);
+	const {
+		state: subjectState,
+		subjectInfoAction,
+		subjectSetAllInfoAction,
+	} = React.useContext(SubjectContext);
+
+	const [currSubState] = useDocumentData(currentSubQuery);
 
 	const [done, setDone] = React.useState(false);
 
@@ -31,6 +41,11 @@ const InfoStep = React.memo(function InfoStep() {
 		const { value } = target;
 		subjectInfoAction({ value, field: this.field });
 	}
+
+	React.useEffect(() => {
+		console.log({ currSubState });
+		subjectSetAllInfoAction({ subjectState: currSubState });
+	}, [currSubState]);
 
 	React.useEffect(() => {
 		subjectInfoAction({ value: done, field: "infoDone" });

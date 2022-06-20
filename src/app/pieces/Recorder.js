@@ -14,6 +14,8 @@ import ReactMarkdown from "react-markdown";
 import { RecordContext } from "../state/data/RecordContext";
 import { useDocumentData } from "react-firebase-hooks/firestore";
 import { currentSubQuery } from "../../firebase/client/firestore";
+import InfoDisplay from "../components/InfoDisplay";
+import { Container } from "@mui/system";
 
 const classes = {
 	boxRoot: {
@@ -79,42 +81,44 @@ const Recorder = React.memo(function Recorder({ subjectInfo }) {
 	};
 
 	return (
-		<Box sx={classes.boxRoot}>
-			<Card ref={vizRef}>
-				<CardContent sx={classes.cardRoot}>
-					<Typography>{currSubState?.subjectName}</Typography>
-					<Typography
-						sx={{ textAlign: "center" }}
-						variant="h6"
-						component="div"
-						gutterBottom
-					>
-						<ReactMarkdown>{subInf.description}</ReactMarkdown>
-					</Typography>
+		<Container maxWidth="sm">
+			<Box sx={classes.boxRoot}>
+				{currSubState && <InfoDisplay info={currSubState} />}
+				<Card ref={vizRef}>
+					<CardContent sx={classes.cardRoot}>
+						<Typography
+							sx={{ textAlign: "center" }}
+							variant="h6"
+							component="div"
+							gutterBottom
+						>
+							<ReactMarkdown>{subInf.description}</ReactMarkdown>
+						</Typography>
 
-					<CardMedia
-						sx={classes.imgRoot}
-						component="img"
-						image="/image/icon_1024.png"
-						alt="stim-image"
-					/>
-					<AudioPlayer {...{ playerRef }} />
-					<>
-						<Box sx={classes.buttonRoot}>
-							<IconButton size="large">
-								<ArrowBackIosIcon />
-							</IconButton>
-							<IconButton size="large" onClick={handleRecord}>
-								<RadioButtonCheckedIcon color="secondary" />
-							</IconButton>
-							<IconButton size="large">
-								<ArrowForwardIosIcon />
-							</IconButton>
-						</Box>
-					</>
-				</CardContent>
-			</Card>
-		</Box>
+						<CardMedia
+							sx={classes.imgRoot}
+							component="img"
+							image="/image/icon_1024.png"
+							alt="stim-image"
+						/>
+						<AudioPlayer {...{ playerRef }} />
+						<>
+							<Box sx={classes.buttonRoot}>
+								<IconButton size="large">
+									<ArrowBackIosIcon />
+								</IconButton>
+								<IconButton size="large" onClick={handleRecord}>
+									<RadioButtonCheckedIcon color="secondary" />
+								</IconButton>
+								<IconButton size="large">
+									<ArrowForwardIosIcon />
+								</IconButton>
+							</Box>
+						</>
+					</CardContent>
+				</Card>
+			</Box>
+		</Container>
 	);
 });
 
