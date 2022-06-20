@@ -201,10 +201,33 @@ const subjectSubmitAction = (dispatch) => {
 };
 
 const subjectFirebaseUpdateAction = (dispatch) => {
-	return ({ subjectState }) => {
+	return ({ subjectState, action }) => {
 		dispatch({ type: "SET_LOADING", payload: true });
 
-		firebaseCurrentSubjectState({ subjectState });
+		let rState = {};
+		switch (action) {
+			case "start":
+				rState = {
+					isRecording: true,
+					recDone: false,
+					audioFilename: "audio.wav",
+				};
+				break;
+			case "stop":
+				rState = {
+					isRecording: false,
+					recDone: true,
+					audioFilename: "audio.wav",
+					audioUrl: "",
+				};
+				break;
+			default:
+				break;
+		}
+
+		firebaseCurrentSubjectState({
+			subjectState: { ...subjectState, ...rState },
+		});
 
 		dispatch({ type: "SET_LOADING", payload: false });
 	};

@@ -35,7 +35,7 @@ const Steps = React.memo(function Steps() {
 	const { state: subjectState, subjectFirebaseUpdateAction } =
 		React.useContext(SubjectContext);
 
-	const [activeStep, setActiveStep] = React.useState(2);
+	const [activeStep, setActiveStep] = React.useState(0);
 
 	const [disable, setDisable] = React.useState(true);
 

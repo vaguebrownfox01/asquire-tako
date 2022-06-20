@@ -20,68 +20,26 @@ const subInf = {
 const RecordStep = React.memo(function RecordStep() {
 	const [currSubState, loading, error] = useDocumentData(currentSubQuery);
 
-	const { state: subjectState, subjectFirebaseUpdateAction } =
-		React.useContext(SubjectContext);
-
-	const handleRecordStart = () => {
-		let recordState = {
-			isRecording: true,
-			recDone: false,
-		};
-
-		subjectFirebaseUpdateAction({
-			subjectState: { ...subjectState, ...recordState },
-		});
-	};
-
-	const handleRecordStop = () => {
-		let recordState = {
-			isRecording: false,
-			recDone: true,
-			audioFileName: "audio.wav",
-		};
-
-		subjectFirebaseUpdateAction({
-			subjectState: { ...subjectState, ...recordState },
-		});
-	};
+	const { subjectFirebaseUpdateAction } = React.useContext(SubjectContext);
 
 	function handleRecord() {
-		let rState = {};
-		switch (this.action) {
-			case "start":
-				rState = {
-					isRecording: true,
-					recDone: false,
-					audioFilename: "audio.wav",
-				};
-				break;
-			case "stop":
-				rState = {
-					isRecording: false,
-					recDone: true,
-					audioFilename: "audio.wav",
-					audioUrl: "",
-				};
-				break;
-			default:
-				break;
-		}
-
 		subjectFirebaseUpdateAction({
-			subjectState: { ...subjectState, ...rState },
+			subjectState: { ...currSubState },
+			action: this.action,
 		});
 	}
 
 	return (
 		<Box>
 			{currSubState ? (
-				<InfoDisplay info={currSubState} />
+				<>
+					<InfoDisplay info={currSubState} />
+					<StimCard subjectInfo={subInf} />
+					<RecordCard {...{ handleRecord, currSubState }} />
+				</>
 			) : (
 				<h3>Loading...</h3>
 			)}
-			<StimCard subjectInfo={subInf} />
-			<RecordCard {...{ handleRecord }} />
 		</Box>
 	);
 });
