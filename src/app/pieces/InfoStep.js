@@ -7,10 +7,7 @@ import {
 	TextField,
 } from "@mui/material";
 import * as React from "react";
-import {
-	useDocumentData,
-	useDocumentDataOnce,
-} from "react-firebase-hooks/firestore";
+import { useDocumentData } from "react-firebase-hooks/firestore";
 import { currentSubQuery } from "../../firebase/client/firestore";
 
 import { SubjectContext } from "../state/data/SubjectContext";

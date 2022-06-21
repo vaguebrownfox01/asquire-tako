@@ -7,6 +7,7 @@ exports.VERSION = "00";
 // Firestore
 exports.DATABASE_URL =
 	"https://tako-vrx-default-rtdb.asia-southeast1.firebasedatabase.app";
+exports.SUBJECT_COLLECTION = "subjects";
 exports.CONTENT_COLLECTION = "content";
 exports.STIM_DOC = `/${this.CONTENT_COLLECTION}/stimulus`;
 exports.SURVEY_DOC = `/${this.CONTENT_COLLECTION}/survey`;

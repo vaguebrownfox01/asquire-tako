@@ -1,3 +1,5 @@
+import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
+import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 import {
 	Box,
 	Card,
@@ -12,8 +14,6 @@ import {
 	TextField,
 	Typography,
 } from "@mui/material";
-import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
-import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 import * as React from "react";
 
 const classes = {
@@ -101,6 +101,16 @@ const QuestionCard = React.memo(function QuestionCard({
 							</>
 						</RadioGroup>
 					</FormControl>
+				</Collapse>
+				<Collapse in={done}>
+					<Typography
+						sx={{ textAlign: "center" }}
+						color="GrayText"
+						variant="h6"
+						gutterBottom
+					>
+						Done!!!
+					</Typography>
 				</Collapse>
 				<Box sx={classes.buttonRoot}>
 					<IconButton

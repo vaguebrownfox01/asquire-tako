@@ -2,8 +2,10 @@
 import { v4 as uuid } from "uuid";
 import createDataContext from "../createDataContext";
 
-// import { questions } from "../../appconfig/content/questions";
-import { firebaseCurrentSubjectState } from "../../../firebase/client/firestore";
+import {
+	firebaseCurrentSubjectState,
+	firebaseSubjectAdd,
+} from "../../../firebase/client/firestore";
 
 export const fields = [
 	{
@@ -48,6 +50,8 @@ const genders = [
 // Initial State
 const subjectInitialState = {
 	loading: false,
+
+	firebaseId: null,
 	subjectName: "",
 	subjectAge: "",
 	subjectWeight: "",
@@ -149,10 +153,19 @@ const subjectLoadAction = (dispatch) => {
 };
 
 const subjectSetAllInfoAction = (dispatch) => {
-	return ({ subjectState }) => {
+	return ({ subjectState, action }) => {
 		dispatch({ type: "SET_LOADING", payload: true });
 
-		dispatch({ type: "SET_ALL", payload: subjectState });
+		switch (action) {
+			case "reset":
+				dispatch({ type: "SET_ALL", payload: subjectInitialState });
+
+				break;
+
+			default:
+				dispatch({ type: "SET_ALL", payload: subjectState });
+				break;
+		}
 
 		dispatch({ type: "SET_LOADING", payload: false });
 	};
@@ -231,7 +244,7 @@ const subjectSubmitAction = (dispatch) => {
 };
 
 const subjectFirebaseUpdateAction = (dispatch) => {
-	return ({ subjectState, action, payload }) => {
+	return async ({ subjectState, action, payload }) => {
 		dispatch({ type: "SET_LOADING", payload: true });
 
 		let rState = {};
@@ -257,6 +270,9 @@ const subjectFirebaseUpdateAction = (dispatch) => {
 				break;
 
 			case "prev":
+				break;
+			case "update":
+				rState = await firebaseSubjectAdd({ subjectState });
 				break;
 			default:
 				break;

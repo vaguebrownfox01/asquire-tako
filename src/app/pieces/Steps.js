@@ -12,8 +12,14 @@ import QuestionStep from "./QuestionStep";
 import RecordStep from "./RecordStep";
 
 import { SubjectContext } from "../state/data/SubjectContext";
+import SubjectList from "./SubjectList";
 
 const steps = [
+	{
+		label: "Subject List",
+		description: `list of subjects`,
+		component: <SubjectList />,
+	},
 	{
 		label: "Subject Info",
 		description: `create id`,
@@ -31,32 +37,48 @@ const steps = [
 	},
 ];
 
+const step = {
+	SUB_LIST: 0,
+	SUB_INFO: 1,
+	SUB_QUES: 2,
+	SUB_RECD: 4,
+};
+
 const Steps = React.memo(function Steps() {
 	const { state: subjectState, subjectFirebaseUpdateAction } =
 		React.useContext(SubjectContext);
 
-	const [activeStep, setActiveStep] = React.useState(0);
+	const [activeStep, setActiveStep] = React.useState(step.SUB_LIST);
 
 	const [disable, setDisable] = React.useState(true);
 
 	React.useEffect(() => {
 		switch (activeStep) {
-			case 0:
+			case step.SUB_LIST:
+				setDisable(false);
+				break;
+
+			case step.SUB_INFO:
 				setDisable(!subjectState.infoDone);
 				break;
 
-			case 1:
+			case step.SUB_QUES:
 				setDisable(!subjectState.questionDone);
 				break;
 			default:
 				setDisable(true);
 				break;
 		}
-	}, [subjectState]);
+	}, [subjectState, activeStep]);
 
 	const handleNext = () => {
+		if (activeStep === step.SUB_LIST) {
+			subjectFirebaseUpdateAction({ subjectState });
+		} else {
+			subjectFirebaseUpdateAction({ subjectState, action: "update" });
+		}
+
 		setActiveStep((prevActiveStep) => prevActiveStep + 1);
-		subjectFirebaseUpdateAction({ subjectState });
 	};
 
 	const handleBack = () => {
@@ -77,7 +99,7 @@ const Steps = React.memo(function Steps() {
 				{steps.map((step, index) => (
 					<Step key={step.label}>
 						<StepLabel>{step.label}</StepLabel>
-						<StepContent>
+						<StepContent TransitionProps={{ unmountOnExit: false }}>
 							<>{step.component}</>
 							<StepButtons
 								{...{ index, handleNext, handleBack, disable }}
