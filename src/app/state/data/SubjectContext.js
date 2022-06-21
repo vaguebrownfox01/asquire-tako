@@ -7,7 +7,7 @@ import {
 	firebaseSubjectAdd,
 } from "../../../firebase/client/firestore";
 
-export const fields = [
+const fields = [
 	{
 		id: "Name",
 		label: "Name",
@@ -180,7 +180,6 @@ const subjectSetQuestionAction = (dispatch) => {
 			payload = {
 				allQuestions: allQuestions,
 				currentQuestion: allQuestions[1],
-				// answeredQs: [],
 			};
 		}
 

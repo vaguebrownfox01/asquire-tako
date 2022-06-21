@@ -99,7 +99,11 @@ const Steps = React.memo(function Steps() {
 				{steps.map((step, index) => (
 					<Step key={step.label}>
 						<StepLabel>{step.label}</StepLabel>
-						<StepContent TransitionProps={{ unmountOnExit: false }}>
+						<StepContent
+							TransitionProps={{
+								unmountOnExit: true,
+							}}
+						>
 							<>{step.component}</>
 							<StepButtons
 								{...{ index, handleNext, handleBack, disable }}

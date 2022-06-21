@@ -40,7 +40,6 @@ const InfoStep = React.memo(function InfoStep() {
 	}
 
 	React.useEffect(() => {
-		console.log({ currSubState });
 		subjectSetAllInfoAction({ subjectState: currSubState });
 	}, [currSubState]);
 

@@ -1,4 +1,5 @@
 import SubjectIcon from "@mui/icons-material/AccountCircle";
+import AddCircleIcon from "@mui/icons-material/AddCircle";
 import { Box, ListItemIcon } from "@mui/material";
 import List from "@mui/material/List";
 import ListItem from "@mui/material/ListItem";
@@ -32,7 +33,7 @@ const SubjectList = React.memo(function SubjectList() {
 					}}
 					aria-label="contacts"
 				>
-					{subjectList.map((sub, i) => (
+					{subjectList.map((sub) => (
 						<ListItem key={sub.firebaseId} disablePadding>
 							<ListItemButton
 								selected={
@@ -60,9 +61,9 @@ const SubjectList = React.memo(function SubjectList() {
 							})}
 						>
 							<ListItemIcon>
-								<SubjectIcon />
+								<AddCircleIcon color="secondary" />
 							</ListItemIcon>
-							<ListItemText secondary={"New Subject"} />
+							<ListItemText secondary={"Add New Subject"} />
 						</ListItemButton>
 					</ListItem>
 				</List>

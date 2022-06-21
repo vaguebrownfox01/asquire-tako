@@ -17,7 +17,7 @@ const QuestionStep = React.memo(function QuestionStep() {
 
 	React.useEffect(() => {
 		allQuestions && subjectSetQuestionAction({ allQuestions });
-	}, [allQuestions]);
+	}, [loading]);
 
 	const handleSubmit = ({ answer, next }) => {
 		subjectSubmitAction({
@@ -35,7 +35,7 @@ const QuestionStep = React.memo(function QuestionStep() {
 				flexDirection: "column",
 			}}
 		>
-			{!loading ? (
+			{allQuestions ? (
 				<QuestionCard
 					{...{
 						question: subjectState.currentQuestion,

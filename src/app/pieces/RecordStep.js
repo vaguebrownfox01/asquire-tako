@@ -38,8 +38,6 @@ const RecordStep = React.memo(function RecordStep() {
 	React.useEffect(() => {
 		if (!allStims) return;
 
-		console.log({ allStims });
-
 		subjectSetStimsAction({ allStims });
 		subjectFirebaseUpdateAction({
 			subjectState: { ...currSubState },
@@ -61,7 +59,7 @@ const RecordStep = React.memo(function RecordStep() {
 		switch (this.action) {
 			case "next":
 				i = stimIndex + 1;
-				nextStimIndex = i > stimTotalCount ? stimTotalCount : i;
+				nextStimIndex = i >= stimTotalCount ? stimTotalCount - 1 : i;
 				break;
 			case "prev":
 				i = stimIndex - 1;
