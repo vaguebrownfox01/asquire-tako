@@ -1,7 +1,10 @@
 import { Box } from "@mui/material";
 import * as React from "react";
 import { useDocumentData } from "react-firebase-hooks/firestore";
-import { currentSubQuery } from "../../firebase/client/firestore";
+import {
+	currentSubQuery,
+	stimulusQuery,
+} from "../../firebase/client/firestore";
 import InfoDisplay from "../components/InfoDisplay";
 import RecordCard from "../components/RecordCard";
 import StimCard from "../components/StimCard";
@@ -18,14 +21,64 @@ const subInf = {
 };
 
 const RecordStep = React.memo(function RecordStep() {
-	const [currSubState, loading, error] = useDocumentData(currentSubQuery);
+	const [currSubState] = useDocumentData(currentSubQuery);
+	const [allStims] = useDocumentData(stimulusQuery);
 
-	const { subjectFirebaseUpdateAction } = React.useContext(SubjectContext);
+	const { subjectSetStimsAction, subjectFirebaseUpdateAction } =
+		React.useContext(SubjectContext);
 
 	function handleRecord() {
 		subjectFirebaseUpdateAction({
 			subjectState: { ...currSubState },
 			action: this.action,
+			payload: null,
+		});
+	}
+
+	React.useEffect(() => {
+		if (!allStims) return;
+
+		console.log({ allStims });
+
+		subjectSetStimsAction({ allStims });
+		subjectFirebaseUpdateAction({
+			subjectState: { ...currSubState },
+			action: "load",
+			payload: {
+				currentStim: allStims[0],
+				stimIndex: 0,
+				stimTotalCount: Object.keys(allStims).length,
+			},
+		});
+	}, [allStims]);
+
+	function handleStimChange() {
+		// actions: "next", "prev"
+		const { stimIndex, stimTotalCount } = currSubState;
+
+		let i;
+		let nextStimIndex;
+		switch (this.action) {
+			case "next":
+				i = stimIndex + 1;
+				nextStimIndex = i > stimTotalCount ? stimTotalCount : i;
+				break;
+			case "prev":
+				i = stimIndex - 1;
+				nextStimIndex = i < 0 ? 0 : i;
+				break;
+			default:
+				nextStimIndex = 0;
+				break;
+		}
+
+		subjectFirebaseUpdateAction({
+			subjectState: { ...currSubState },
+			action: "load",
+			payload: {
+				currentStim: allStims[nextStimIndex],
+				stimIndex: nextStimIndex,
+			},
 		});
 	}
 
@@ -34,8 +87,10 @@ const RecordStep = React.memo(function RecordStep() {
 			{currSubState ? (
 				<>
 					<InfoDisplay info={currSubState} />
-					<StimCard subjectInfo={subInf} />
-					<RecordCard {...{ handleRecord, currSubState }} />
+					<StimCard subjectInfo={currSubState} />
+					<RecordCard
+						{...{ handleRecord, currSubState, handleStimChange }}
+					/>
 				</>
 			) : (
 				<h3>Loading...</h3>

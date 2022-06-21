@@ -1,8 +1,8 @@
 import PrevStimIcon from "@mui/icons-material/ArrowBackIos";
 import NextStimIcon from "@mui/icons-material/ArrowForwardIos";
 import RecordStartIcon from "@mui/icons-material/RadioButtonChecked";
-import { Box, Card, CardContent, IconButton } from "@mui/material";
 import RecordStopIcon from "@mui/icons-material/StopCircle";
+import { Box, Card, CardContent, IconButton } from "@mui/material";
 import * as React from "react";
 
 const classes = {
@@ -18,6 +18,7 @@ const classes = {
 const RecordCard = React.memo(function RecordCard({
 	handleRecord,
 	currSubState,
+	handleStimChange,
 }) {
 	const { isRecording } = currSubState;
 
@@ -32,7 +33,9 @@ const RecordCard = React.memo(function RecordCard({
 			<CardContent sx={classes.cardRoot}>
 				<>
 					<Box sx={classes.buttonRoot}>
-						<IconButton>
+						<IconButton
+							onClick={handleStimChange.bind({ action: "prev" })}
+						>
 							<PrevStimIcon />
 						</IconButton>
 
@@ -44,7 +47,9 @@ const RecordCard = React.memo(function RecordCard({
 							)}
 						</IconButton>
 
-						<IconButton>
+						<IconButton
+							onClick={handleStimChange.bind({ action: "next" })}
+						>
 							<NextStimIcon />
 						</IconButton>
 					</Box>

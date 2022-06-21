@@ -1,10 +1,7 @@
-import * as React from "react";
-import Box from "@mui/material/Box";
 import Card from "@mui/material/Card";
-import CardActions from "@mui/material/CardActions";
 import CardContent from "@mui/material/CardContent";
-import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
+import * as React from "react";
 
 const InfoDisplay = React.memo(function InfoDisplay({ info }) {
 	const {
@@ -13,6 +10,7 @@ const InfoDisplay = React.memo(function InfoDisplay({ info }) {
 		subjectAge,
 		questionDone,
 		isRecording,
+		currentStim,
 	} = info;
 
 	const doneQ = questionDone ? "done" : "not done";
@@ -30,7 +28,9 @@ const InfoDisplay = React.memo(function InfoDisplay({ info }) {
 
 					<Typography variant="caption">{`Questionnaire: ${doneQ}`}</Typography>
 					<br />
-					<Typography variant="caption">{`RecordingState: ${doneR}`}</Typography>
+					<Typography variant="caption">{`Recording state: ${doneR}`}</Typography>
+					<br />
+					<Typography variant="caption">{`Current stimulus: ${currentStim.label}`}</Typography>
 				</CardContent>
 			)}
 		</Card>

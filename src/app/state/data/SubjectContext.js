@@ -1,6 +1,6 @@
 // user context
+import { v4 as uuid } from "uuid";
 import createDataContext from "../createDataContext";
-import { parse, v4 as uuid } from "uuid";
 
 // import { questions } from "../../appconfig/content/questions";
 import { firebaseCurrentSubjectState } from "../../../firebase/client/firestore";
@@ -57,10 +57,27 @@ const subjectInitialState = {
 	infoDone: false,
 
 	allQuestions: null,
-	currentQuestion: {},
-	previousQs: [],
-	answers: {},
+	currentQuestion: {
+		qno: 1,
+		question: "Question?",
+		options: ["Option 1", "Option 2"],
+		nextQnos: [2], // Next question
+	},
+	answeredQs: [],
 	questionDone: false,
+
+	allStims: null,
+	stimCount: 0,
+	stimLength: 0,
+	currentStim: {
+		label: "sents",
+		tag: "sent",
+		skipScore: 1,
+		imageLink: "",
+		audioDescriptionLink: null,
+		description: "Task Description",
+	},
+	stimsDone: false,
 
 	isRecording: false,
 	recDone: false,
@@ -68,16 +85,6 @@ const subjectInitialState = {
 	fields,
 	genders,
 };
-
-// Sample Question
-// let qs = {
-// 	1: {
-// 		qno: 1,
-// 		question: "What is your smoking status?",
-// 		options: ["Ex-smoker(1 year)", "Current smoker", "Non-smoker"],
-// 		nextQnos: [2],
-// 	},
-// };
 
 // Reducer
 const subjectReducer = (state, action) => {
@@ -93,6 +100,9 @@ const subjectReducer = (state, action) => {
 			const { field, value } = payload;
 			return { ...state, [field]: value };
 
+		case "SET_STIMS":
+			return { ...state, ...payload };
+
 		case "SET_QUESTION":
 			return { ...state, ...payload };
 
@@ -103,22 +113,22 @@ const subjectReducer = (state, action) => {
 			return {
 				...state,
 				questionDone: _qdone,
-				previousQs: [...state.previousQs, question],
+				answeredQs: [...state.answeredQs, question],
 				currentQuestion:
 					state.allQuestions[nextQno] || state.currentQuestion,
 			};
 
 		case "SET_QUESTION_PREV":
-			let _previousQs = [...state.previousQs];
-			if (_previousQs.length < 1) {
+			let _answeredQs = [...state.answeredQs];
+			if (_answeredQs.length < 1) {
 				return { ...state, questionDone: false };
 			}
 
-			const _currentQuestion = _previousQs.pop();
+			const _currentQuestion = _answeredQs.pop();
 			return {
 				...state,
 				questionDone: false,
-				previousQs: [..._previousQs],
+				answeredQs: [..._answeredQs],
 				currentQuestion: _currentQuestion,
 			};
 
@@ -157,11 +167,31 @@ const subjectSetQuestionAction = (dispatch) => {
 			payload = {
 				allQuestions: allQuestions,
 				currentQuestion: allQuestions[1],
-				// previousQs: [],
+				// answeredQs: [],
 			};
 		}
 
 		dispatch({ type: "SET_QUESTION", payload: payload });
+
+		dispatch({ type: "SET_LOADING", payload: false });
+	};
+};
+
+const subjectSetStimsAction = (dispatch) => {
+	return ({ allStims }) => {
+		dispatch({ type: "SET_LOADING", payload: true });
+
+		let payload = {};
+		if (allStims) {
+			payload = {
+				allStims: allStims,
+				currentStim: allStims[0],
+				stimCount: 0,
+				stimLength: allStims.length,
+			};
+		}
+
+		dispatch({ type: "SET_STIMS", payload: payload });
 
 		dispatch({ type: "SET_LOADING", payload: false });
 	};
@@ -201,7 +231,7 @@ const subjectSubmitAction = (dispatch) => {
 };
 
 const subjectFirebaseUpdateAction = (dispatch) => {
-	return ({ subjectState, action }) => {
+	return ({ subjectState, action, payload }) => {
 		dispatch({ type: "SET_LOADING", payload: true });
 
 		let rState = {};
@@ -220,6 +250,13 @@ const subjectFirebaseUpdateAction = (dispatch) => {
 					audioFilename: "audio.wav",
 					audioUrl: "",
 				};
+				break;
+
+			case "load":
+				rState = { ...payload };
+				break;
+
+			case "prev":
 				break;
 			default:
 				break;
@@ -269,6 +306,7 @@ const { Context: SubjectContext, Provider: SubjectProvider } =
 			subjectInfoAction,
 			subjectSetQuestionAction,
 			subjectSubmitAction,
+			subjectSetStimsAction,
 
 			subjectFirebaseUpdateAction,
 		},

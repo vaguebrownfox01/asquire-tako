@@ -79,11 +79,17 @@ const Recorder = React.memo(function Recorder({ subjectInfo }) {
 	return (
 		<Container maxWidth="sm">
 			<Box sx={classes.boxRoot}>
-				{currSubState && <InfoDisplay info={currSubState} />}
-				<StimCard subjectInfo={subInf} />
+				{currSubState && (
+					<>
+						<InfoDisplay info={currSubState} />
+						<StimCard subjectInfo={currSubState} />
+					</>
+				)}
+
 				<Card ref={vizRef}>
 					<CardContent sx={classes.cardRoot}>
 						<AudioPlayer {...{ playerRef }} />
+
 						<>
 							<Box sx={classes.buttonRoot}>
 								<IconButton size="large">

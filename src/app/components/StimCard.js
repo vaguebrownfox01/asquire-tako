@@ -8,12 +8,13 @@ const classes = {
 		flexDirection: "column",
 		alignItems: "stretch",
 		marginBottom: 1,
+		minHeight: 172,
 	}),
 	imgRoot: (t) => ({ height: 128, width: 128, margin: t.spacing(2, "auto") }),
 };
 
 const StimCard = React.memo(function StimCard({ subjectInfo }) {
-	const { description } = subjectInfo;
+	const { currentStim, stimIndex, stimTotalCount } = subjectInfo;
 	return (
 		<Card>
 			<CardContent sx={classes.cardRoot}>
@@ -24,9 +25,14 @@ const StimCard = React.memo(function StimCard({ subjectInfo }) {
 						component="div"
 						gutterBottom
 					>
-						<ReactMarkdown>{description}</ReactMarkdown>
+						<ReactMarkdown>
+							{currentStim?.description}
+						</ReactMarkdown>
 					</Typography>
 				</Box>
+				<Typography sx={{ textAlign: "center" }} variant="caption">
+					{`${parseInt(stimIndex) + 1}/${stimTotalCount}`}
+				</Typography>
 			</CardContent>
 		</Card>
 	);
