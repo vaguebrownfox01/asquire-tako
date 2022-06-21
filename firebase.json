@@ -1,7 +1,7 @@
 {
   "hosting": {
     "public": "build",
-    "site": "takoasquire",
+    "site": "tako-vrx",
     "rewrites": [
       {
         "source": "**",
