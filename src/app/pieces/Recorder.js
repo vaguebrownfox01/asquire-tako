@@ -34,17 +34,7 @@ const classes = {
 };
 const MAX_REC_DURATION = 121000;
 
-const subInf = {
-	label: "sents",
-	tag: "sent",
-	imageLink: "",
-	audioDescriptionLink: null,
-
-	description:
-		'Start recording and Say **"I am very excited to contribute!"**',
-};
-
-const Recorder = React.memo(function Recorder({ subjectInfo }) {
+const Recorder = React.memo(function Recorder() {
 	const {
 		state: recordState,
 		recordStartAction,
@@ -61,7 +51,7 @@ const Recorder = React.memo(function Recorder({ subjectInfo }) {
 		clearInterval(timeoutRef.current);
 		if (!recordState.isRecording) {
 			vizRef.current.scrollIntoView(false);
-			recordStartAction(recordState.inputStream);
+			// recordStartAction(recordState.inputStream);
 			timeoutRef.current = setTimeout(() => {
 				handleRecStop();
 			}, MAX_REC_DURATION);
@@ -73,7 +63,7 @@ const Recorder = React.memo(function Recorder({ subjectInfo }) {
 	};
 
 	const handleRecStop = async () => {
-		const res = await recordStopAction();
+		// const res = await recordStopAction();
 	};
 
 	return (
