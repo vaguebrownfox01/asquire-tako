@@ -41,10 +41,11 @@ export const getAudioInputDevices = async () => {
 		});
 	const audioInputStream = await getAudioInputStream(audioDevices[0]);
 
-	let analyserNode = null;
-	audioInputStream && (analyserNode = await setupContext(audioInputStream));
+	let audioAnalyserNode = null;
+	audioInputStream &&
+		(audioAnalyserNode = await setupContext(audioInputStream));
 
-	return { audioDevices, audioInputStream, analyserNode };
+	return { audioDevices, audioInputStream, audioAnalyserNode };
 };
 
 export const getAudioOutputDevices = async () => {
@@ -99,10 +100,7 @@ export const audioRecord = (audioStream) => {
 		console.log("media recorder", mediaRecorder);
 
 		mediaRecorder.addEventListener("error", (e) => {
-			console.log("recorder Error: ", e);
-		});
-		mediaRecorder.addEventListener("error", (w) => {
-			console.log("recorder Warning: ", w);
+			console.error("recorder Error: ", e);
 		});
 
 		let recordedChunks = [];
@@ -120,11 +118,11 @@ export const audioRecord = (audioStream) => {
 					mediaRecorder.start();
 					resolveStart(true);
 				} catch (err) {
-					console.log("recorder start fail", err);
+					console.error("recorder start fail", err);
 					try {
 						mediaRecorder.stop();
 					} catch (error) {
-						console.log("stop failed rec.js", error);
+						console.error("stop failed rec.js", error);
 						rejectStart(false);
 					}
 				}
@@ -140,32 +138,8 @@ export const audioRecord = (audioStream) => {
 
 					const audioUrl = URL.createObjectURL(audioBlob);
 
-					// const audio = new Audio(audioUrl);
-
-					// const playAudio = () => {
-					// 	return new Promise((resolvePlay, rejectPlay) => {
-					// 		audio.play().catch((err) => {
-					// 			console.log("recorder:: audio play fail", err);
-					// 			rejectPlay(false);
-					// 		});
-
-					// 		audio.addEventListener("ended", (e) => {
-					// 			resolvePlay(true);
-					// 		});
-					// 	});
-					// };
-
-					// const pauseAudio = () => {
-					// 	audio.pause().catch((err) => {
-					// 		console.log("recorder:: audio play fail", err);
-					// 	});
-					// };
-
 					resolveStop({
 						audioUrl,
-						// audioBlob,
-						// playAudio,
-						// pauseAudio,
 					});
 				});
 
