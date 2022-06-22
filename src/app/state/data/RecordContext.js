@@ -1,170 +1,190 @@
 // record context
+import { firebaseCurrentSubjectState } from "../../../firebase/client/firestore";
 import {
 	audioRecord,
+	createAudioBuffer,
 	getAudioInputDevices,
-	getAudioOutputDevices,
 } from "../../utils/recorder";
 import { startVibrate } from "../../utils/vibrate";
 import createDataContext from "../createDataContext";
-import { batch } from "react-redux";
-import { firebaseCurrentSubjectState } from "../../../firebase/client/firestore";
+import { toWav } from "audiobuffer-to-wav";
 // Initial State
 const recordInitialState = {
 	loading: false,
 
-	isRecording: false,
-	isPlaying: false,
-	isPlayingInst: false,
-	recDone: false,
-	plyDone: false,
-	playUrl: "",
-	audioBuffer: [],
+	audioInputStream: null,
+	audioAnalyserNode: null,
+
+	recordDone: false,
+	audioFilename: "",
+	audioUrl: "",
 };
 
-// Recorder instance
+/**
+ * Recorder instance: { startRecord, stopRecord } */
 let recorder = null;
 
-// Interval timeout
-let interval = null;
-
-// Reducer
+/**
+ * Reducer
+ *  */
 const recordReducer = (state, action) => {
-	switch (action.type) {
+	const { type, payload } = action;
+	switch (type) {
 		case "SET_LOADING":
-			return { ...state, loading: action.payload };
+			return { ...state, loading: payload };
+
+		case "SET_ERROR":
+			return { ...state, error: payload };
+
+		case "SET_STREAMS":
+			return { ...state, ...payload };
+
+		case "SET_REC_STATE":
+			return { ...state, ...payload };
+
 		default:
 			return state;
 	}
 };
 
-// Actions
-
+/**
+ * Actions
+ *  */
 const recordLoadAction = (dispatch) => {
+	const wait = (a) => dispatch({ type: "SET_LOADING", payload: a });
 	return () => {
-		dispatch({ type: "SET_LOADING", payload: true });
-
-		console.log("record action log");
-
-		dispatch({ type: "SET_LOADING", payload: false });
+		wait(false);
 	};
 };
 
-const recordGetDevicesAction = (dispatch) => {
+const recordInitAction = (dispatch) => {
+	const wait = (a) => dispatch({ type: "SET_LOADING", payload: a });
 	return async () => {
-		dispatch({ type: "SET_LOADING", payload: true });
+		wait(true);
+		const { audioInputStream, audioAnalyserNode } =
+			await getAudioInputDevices();
 
-		const {
-			audioDevices: inputDevices,
+		const payload = {
 			audioInputStream,
-			analyserNode,
-		} = await getAudioInputDevices();
-		const outputDevices = await getAudioOutputDevices();
+			audioAnalyserNode,
+			recordDone: false,
+			audioFilename: "",
+			audioUrl: "",
+		};
 
 		dispatch({
 			type: "GET_DEVICES",
-			payload: {
-				inputDevices,
-				outputDevices,
-				audioInputStream,
-				analyserNode,
-			},
+			payload: payload,
 		});
+		wait(false);
 
 		console.log("record context ::get devices");
-
-		dispatch({ type: "SET_LOADING", payload: false });
 	};
 };
 
 const recordStartAction = (dispatch) => {
-	return async (inputStream) => {
-		dispatch({ type: "SET_LOADING", payload: true });
-
+	const wait = (a) => dispatch({ type: "SET_LOADING", payload: a });
+	return async ({ audioInputStream }) => {
 		if (!recorder) {
-			recorder = await audioRecord(inputStream).catch((e) => {
+			wait(true);
+			recorder = await audioRecord(audioInputStream).catch((e) => {
 				console.log("audioRecord error", e);
 				return null;
 			});
+			wait(false);
+			if (!recorder) return -1; // stop
 		}
-		if (!recorder) {
+
+		wait(true);
+		const { startRecord } = recorder;
+
+		const recStart = await startRecord().catch((e) => {
+			console.error("audioRecord start error", e);
 			return null;
-		}
-		const isRecStart = await recorder
-			.startRecord()
-			.then((e) => {
-				startVibrate(70);
-				return e;
-			})
-			.catch((e) => {
-				console.log("audioRecord start error", e);
-				return null;
-			});
-		console.log("record action log:: start record", isRecStart);
+		});
+		wait(false);
+		if (!recStart) return -1; // stop
 
-		if (isRecStart) {
-			console.log("record action log:: start record");
-			batch(() => {
-				dispatch({ type: "SET_REC_DONE", payload: false });
-				dispatch({ type: "SET_REC_STATE", payload: true });
-				dispatch({ type: "SET_PLY_STATE", payload: false });
-				dispatch({ type: "SECONDS", payload: "reset" });
-			});
+		startVibrate(70);
 
-			interval = setInterval(() => {
-				dispatch({ type: "SECONDS", payload: "up" });
-			}, 1000);
-		} else {
-			dispatch({ type: "SET_REC_STATE", payload: false });
-		}
+		let payload = {
+			recordDone: false,
+			audioFilename: "",
+			audioUrl: "",
+		};
 
-		dispatch({ type: "SET_LOADING", payload: false });
+		dispatch({ type: "SET_REC_STATE", payload: payload });
+
+		return 0;
 	};
 };
 
 let audio = null;
 
 const recordStopAction = (dispatch) => {
-	return async () => {
-		dispatch({ type: "SET_LOADING", payload: true });
-
+	const wait = (a) => dispatch({ type: "SET_LOADING", payload: a });
+	return async ({ stim }) => {
 		if (!recorder) {
-			console.log("record action log:: recorder not defined");
+			console.error("record action log:: recorder not defined");
+			return -1; // stop
+		}
+
+		wait(true);
+		const { stopRecord } = recorder;
+
+		audio = await stopRecord().catch((e) => {
+			console.error("audioRecord start error", e);
 			return null;
+		});
+
+		wait(false);
+		if (!audio) return -1; // stop
+
+		startVibrate(70);
+
+		// TODO: use `stim` to create filename
+
+		const payload = {
+			recordDone: true,
+			audioFilename: "audio.wav",
+			audioUrl: audio.audioUrl,
+		};
+
+		dispatch({ type: "SET_REC_STATE", payload: payload });
+
+		return 0;
+	};
+};
+
+const recordUploadAction = (dispatch) => {
+	const wait = (a) => dispatch({ type: "SET_LOADING", payload: a });
+	return async ({ subjectState }) => {
+		if (!audio) {
+			console.error("record action log:: audio not defined");
+			throw new Error("Upload error");
 		}
+		wait(true);
 
-		audio = await recorder
-			.stopRecord()
-			.then((e) => {
-				startVibrate(70);
-				return e;
-			})
-			.catch(() => null);
+		const { audioUrl } = audio;
 
-		if (audio) {
-			batch(() => {
-				dispatch({ type: "SET_REC_STATE", payload: false });
-				dispatch({ type: "SET_REC_DONE", payload: true });
-				dispatch({ type: "SET_PLY_URL", payload: audio.audioUrl });
-			});
+		// Convert to wav format
+		const audioBuffer = await createAudioBuffer(audioUrl);
+		const wavBlob = toWav(audioBuffer);
 
-			clearInterval(interval);
-		}
-
-		dispatch({ type: "SET_LOADING", payload: false });
-
-		return audio;
+		wait(false);
 	};
 };
 
 const recordSetRemoteStateAction = (dispatch) => {
-	return ({ subjectState, recordState }) => {
-		dispatch({ type: "SET_LOADING", payload: true });
+	const wait = (a) => dispatch({ type: "SET_LOADING", payload: a });
+	return async ({ subjectState, recordState }) => {
+		wait(true);
 
-		firebaseCurrentSubjectState({
+		await firebaseCurrentSubjectState({
 			subjectState: { ...subjectState, ...recordState },
 		});
 
-		dispatch({ type: "SET_LOADING", payload: false });
+		wait(false);
 	};
 };
 
@@ -174,9 +194,10 @@ export const { Context: RecordContext, Provider: RecordProvider } =
 		recordReducer,
 		{
 			recordLoadAction,
-			recordGetDevicesAction,
+			recordInitAction,
 			recordStartAction,
 			recordStopAction,
+			recordUploadAction,
 			recordSetRemoteStateAction,
 		},
 		recordInitialState
