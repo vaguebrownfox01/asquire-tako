@@ -14,6 +14,18 @@ const theme = createTheme({
 			main: red.A400,
 		},
 	},
+
+	components: {
+		MuiStepContent: {
+			styleOverrides: {
+				last: {
+					margin: 0,
+					marginTop: 16,
+					padding: 8,
+				},
+			},
+		},
+	},
 });
 
 export default theme;
