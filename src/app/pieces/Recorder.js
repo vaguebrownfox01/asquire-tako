@@ -59,7 +59,7 @@ const Recorder = React.memo(function Recorder() {
 			uploadDone,
 		} = recordState;
 
-		if (recordOn) {
+		if (recordOn && !recodingNow) {
 			// Start recording
 			recordStartAction({ audioInputStream, subjectState: currSubState });
 		} else if (recodingNow) {
@@ -74,11 +74,16 @@ const Recorder = React.memo(function Recorder() {
 			!uploadingNow &&
 			!uploadDone
 		) {
-			// Upload audio
-			// Reset record state
-			// Revoke audio blob url
 			recordUploadAction({ recordState });
 		}
+
+		// console.log({
+		// 	recordOn,
+		// 	recordDone,
+		// 	recordUpload,
+		// 	uploadingNow,
+		// 	uploadDone,
+		// });
 
 		return () => {};
 	}, [currSubState]);

@@ -249,17 +249,12 @@ const subjectFirebaseUpdateAction = (dispatch) => {
 		switch (action) {
 			case "start":
 				rState = {
-					isRecording: true,
-					recDone: false,
-					audioFilename: "audio.wav",
+					recordOn: true,
 				};
 				break;
 			case "stop":
 				rState = {
-					isRecording: false,
-					recDone: true,
-					audioFilename: "audio.wav",
-					audioUrl: "",
+					recordOn: false,
 				};
 				break;
 

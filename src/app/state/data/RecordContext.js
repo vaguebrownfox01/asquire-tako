@@ -7,7 +7,7 @@ import {
 } from "../../utils/recorder";
 import { startVibrate } from "../../utils/vibrate";
 import createDataContext from "../createDataContext";
-import { toWav } from "audiobuffer-to-wav";
+import toWav from "audiobuffer-to-wav";
 import { firebaseSubjectAudioUpload } from "../../../firebase/client/storage";
 // Initial State
 const recordInitialState = {
@@ -77,6 +77,8 @@ const recordInitAction = (dispatch) => {
 			recordDone: false,
 			audioFilename: "",
 			audioUrl: "",
+
+			uploadDone: false,
 		};
 
 		dispatch({
@@ -119,6 +121,8 @@ const recordStartAction = (dispatch) => {
 			recordDone: false,
 			audioFilename: "",
 			audioUrl: "",
+
+			uploadDone: false,
 		};
 
 		dispatch({ type: "SET_REC_STATE", payload: payload });

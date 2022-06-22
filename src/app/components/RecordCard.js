@@ -20,13 +20,13 @@ const RecordCard = React.memo(function RecordCard({
 	currSubState,
 	handleStimChange,
 }) {
-	const { isRecording } = currSubState;
+	const { recordOn } = currSubState;
 
 	const [action, setAction] = React.useState("start");
 
 	React.useEffect(() => {
-		setAction(() => (isRecording ? "stop" : "start"));
-	}, [isRecording]);
+		setAction(() => (recordOn ? "stop" : "start"));
+	}, [recordOn]);
 
 	return (
 		<Card>
@@ -34,13 +34,14 @@ const RecordCard = React.memo(function RecordCard({
 				<>
 					<Box sx={classes.buttonRoot}>
 						<IconButton
+							disabled={recordOn}
 							onClick={handleStimChange.bind({ action: "prev" })}
 						>
 							<PrevStimIcon />
 						</IconButton>
 
 						<IconButton onClick={handleRecord.bind({ action })}>
-							{!isRecording ? (
+							{!recordOn ? (
 								<RecordStartIcon color="secondary" />
 							) : (
 								<RecordStopIcon color="secondary" />
@@ -48,6 +49,7 @@ const RecordCard = React.memo(function RecordCard({
 						</IconButton>
 
 						<IconButton
+							disabled={recordOn}
 							onClick={handleStimChange.bind({ action: "next" })}
 						>
 							<NextStimIcon />

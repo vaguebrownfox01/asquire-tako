@@ -9,12 +9,12 @@ const InfoDisplay = React.memo(function InfoDisplay({ info }) {
 		subjectGender,
 		subjectAge,
 		questionDone,
-		isRecording,
+		recordOn,
 		currentStim,
 	} = info;
 
 	const doneQ = questionDone ? "done" : "not done";
-	const doneR = isRecording ? "recording" : "not recording";
+	const doneR = recordOn ? "recording" : "not recording";
 	return (
 		<Card sx={{ marginBottom: 1 }}>
 			{subjectName && (
