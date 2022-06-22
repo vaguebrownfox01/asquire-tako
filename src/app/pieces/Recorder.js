@@ -1,13 +1,12 @@
-import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
-import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
-import RadioButtonCheckedIcon from "@mui/icons-material/RadioButtonChecked";
-import { Box, Card, CardContent, IconButton } from "@mui/material";
+import { Box, Card, CardContent } from "@mui/material";
 import { Container } from "@mui/system";
 import * as React from "react";
 import { useDocumentData } from "react-firebase-hooks/firestore";
 import { currentSubQuery } from "../../firebase/client/firestore";
 import InfoDisplay from "../components/InfoDisplay";
+import Spectrum from "../components/Spectrum";
 import StimCard from "../components/StimCard";
+import useContainerDimensions from "../hooks/useContainerDimensions";
 import { RecordContext } from "../state/data/RecordContext";
 
 const classes = {
@@ -16,6 +15,9 @@ const classes = {
 		flexDirection: "column",
 	},
 	cardRoot: (t) => ({
+		position: "relative",
+		overflow: "hidden",
+		minHeight: 128,
 		display: "flex",
 		flexDirection: "column",
 		alignItems: "stretch",
@@ -48,21 +50,23 @@ const Recorder = React.memo(function Recorder() {
 	const playerRef = React.useRef();
 	const vizRef = React.useRef();
 
+	const { width, height } = useContainerDimensions(vizRef, recordState);
+
 	React.useEffect(() => {
 		if (!currSubState) return;
 		const { recordOn, recordUpload, currentStim } = currSubState;
 		const {
 			audioInputStream,
 			recordDone,
-			recodingNow,
+			recordingNow,
 			uploadingNow,
 			uploadDone,
 		} = recordState;
 
-		if (recordOn && !recodingNow) {
+		if (recordOn && !recordingNow) {
 			// Start recording
 			recordStartAction({ audioInputStream, subjectState: currSubState });
-		} else if (recodingNow) {
+		} else if (recordingNow) {
 			// Stop recording
 			recordStopAction({ stim: currentStim });
 		}
@@ -104,11 +108,25 @@ const Recorder = React.memo(function Recorder() {
 					</>
 				)}
 
-				<Card ref={vizRef}>
+				<Card sx={{ position: "relative", marginTop: 1 }} ref={vizRef}>
+					<Spectrum
+						{...{
+							height,
+							width,
+							audioAnalyserNode: recordState.audioAnalyserNode,
+							recordingNow: recordState.recordingNow,
+						}}
+					/>
 					<CardContent sx={classes.cardRoot}>
-						<AudioPlayer
-							{...{ playerRef, audioUrl: recordState.audioUrl }}
-						/>
+						{recordState.recordDone && (
+							<AudioPlayer
+								{...{
+									playerRef,
+									audioUrl: recordState.audioUrl,
+									recordDone: recordState.recordDone,
+								}}
+							/>
+						)}
 
 						{/* <>
 							<Box sx={classes.buttonRoot}>

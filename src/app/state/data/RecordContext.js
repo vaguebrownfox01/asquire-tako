@@ -16,7 +16,7 @@ const recordInitialState = {
 	audioInputStream: null,
 	audioAnalyserNode: null,
 
-	recodingNow: false,
+	recordingNow: false,
 	recordDone: false,
 	audioFilename: "",
 	audioUrl: "",
@@ -73,7 +73,7 @@ const recordInitAction = (dispatch) => {
 			audioInputStream,
 			audioAnalyserNode,
 
-			recodingNow: false,
+			recordingNow: false,
 			recordDone: false,
 			audioFilename: "",
 			audioUrl: "",
@@ -117,7 +117,7 @@ const recordStartAction = (dispatch) => {
 		startVibrate(70);
 
 		let payload = {
-			recodingNow: true,
+			recordingNow: true,
 			recordDone: false,
 			audioFilename: "",
 			audioUrl: "",
@@ -157,7 +157,7 @@ const recordStopAction = (dispatch) => {
 		const fileName = `audio${stim.label}.wav`;
 
 		const payload = {
-			recodingNow: false,
+			recordingNow: false,
 			recordDone: true,
 			audioFilename: fileName,
 			audioUrl: audio.audioUrl,
