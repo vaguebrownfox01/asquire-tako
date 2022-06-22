@@ -87,7 +87,7 @@ const recordInitAction = (dispatch) => {
 		});
 		wait(false);
 
-		console.log("record context ::get devices");
+		console.log("record context :: init");
 	};
 };
 
