@@ -82,8 +82,8 @@ const subjectInitialState = {
 	},
 	stimsDone: false,
 
-	isRecording: false,
-	recDone: false,
+	recordOn: false,
+	recordUpload: false,
 
 	fields,
 	genders,
