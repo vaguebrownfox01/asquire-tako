@@ -10,16 +10,6 @@ import RecordCard from "../components/RecordCard";
 import StimCard from "../components/StimCard";
 import { SubjectContext } from "../state/data/SubjectContext";
 
-const subInf = {
-	label: "sents",
-	tag: "sent",
-	imageLink: "",
-	audioDescriptionLink: null,
-
-	description:
-		'Start recording and Say **"I am very excited to contribute!"**',
-};
-
 const RecordStep = React.memo(function RecordStep() {
 	const [currSubState] = useDocumentData(currentSubQuery);
 	const [allStims] = useDocumentData(stimulusQuery);

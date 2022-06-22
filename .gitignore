@@ -26,3 +26,4 @@ yarn-error.log*
 /src/firebase/creds/server*.json
 # /src/firebase/creds/client*.json
 # /src/firebase/creds/setup.js
+.firebase/*

@@ -1,12 +1,12 @@
-import * as React from "react";
 import Box from "@mui/material/Box";
-import Stepper from "@mui/material/Stepper";
-import Step from "@mui/material/Step";
-import StepLabel from "@mui/material/StepLabel";
-import StepContent from "@mui/material/StepContent";
 import Button from "@mui/material/Button";
 import Paper from "@mui/material/Paper";
+import Step from "@mui/material/Step";
+import StepContent from "@mui/material/StepContent";
+import StepLabel from "@mui/material/StepLabel";
+import Stepper from "@mui/material/Stepper";
 import Typography from "@mui/material/Typography";
+import * as React from "react";
 import InfoStep from "./InfoStep";
 import QuestionStep from "./QuestionStep";
 import RecordStep from "./RecordStep";
@@ -41,7 +41,7 @@ const step = {
 	SUB_LIST: 0,
 	SUB_INFO: 1,
 	SUB_QUES: 2,
-	SUB_RECD: 4,
+	SUB_RECD: 3,
 };
 
 const Steps = React.memo(function Steps() {
@@ -65,6 +65,11 @@ const Steps = React.memo(function Steps() {
 			case step.SUB_QUES:
 				setDisable(!subjectState.questionDone);
 				break;
+
+			case step.SUB_RECD:
+				setDisable(true);
+				break;
+
 			default:
 				setDisable(true);
 				break;

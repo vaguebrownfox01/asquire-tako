@@ -1,5 +1,4 @@
 // user context
-import { v4 as uuid } from "uuid";
 import createDataContext from "../createDataContext";
 
 import {
@@ -268,8 +267,6 @@ const subjectFirebaseUpdateAction = (dispatch) => {
 				rState = { ...payload };
 				break;
 
-			case "prev":
-				break;
 			case "update":
 				rState = await firebaseSubjectAdd({ subjectState });
 				break;
@@ -304,11 +301,6 @@ const formatFieldValue = ({ field, value }) => {
 		default:
 			return { f: field, v: value };
 	}
-};
-
-const getId = (name = "") => {
-	let id = name.replace(/[a-zA-Z]/g, "").toLowerCase();
-	return `${id}-${uuid().slice(0, 8)}`;
 };
 
 // Export

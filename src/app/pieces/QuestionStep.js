@@ -17,7 +17,7 @@ const QuestionStep = React.memo(function QuestionStep() {
 
 	React.useEffect(() => {
 		allQuestions && subjectSetQuestionAction({ allQuestions });
-	}, [loading]);
+	}, [allQuestions, loading]);
 
 	const handleSubmit = ({ answer, next }) => {
 		subjectSubmitAction({
