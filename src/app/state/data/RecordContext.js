@@ -8,6 +8,7 @@ import {
 import { startVibrate } from "../../utils/vibrate";
 import createDataContext from "../createDataContext";
 import { toWav } from "audiobuffer-to-wav";
+import { firebaseSubjectAudioUpload } from "../../../firebase/client/storage";
 // Initial State
 const recordInitialState = {
 	loading: false,
@@ -15,9 +16,13 @@ const recordInitialState = {
 	audioInputStream: null,
 	audioAnalyserNode: null,
 
+	recodingNow: false,
 	recordDone: false,
 	audioFilename: "",
 	audioUrl: "",
+
+	uploadingNow: false,
+	uploadDone: false,
 };
 
 /**
@@ -67,13 +72,15 @@ const recordInitAction = (dispatch) => {
 		const payload = {
 			audioInputStream,
 			audioAnalyserNode,
+
+			recodingNow: false,
 			recordDone: false,
 			audioFilename: "",
 			audioUrl: "",
 		};
 
 		dispatch({
-			type: "GET_DEVICES",
+			type: "SET_REC_STATE",
 			payload: payload,
 		});
 		wait(false);
@@ -84,7 +91,7 @@ const recordInitAction = (dispatch) => {
 
 const recordStartAction = (dispatch) => {
 	const wait = (a) => dispatch({ type: "SET_LOADING", payload: a });
-	return async ({ audioInputStream }) => {
+	return async ({ audioInputStream, subjectState }) => {
 		if (!recorder) {
 			wait(true);
 			recorder = await audioRecord(audioInputStream).catch((e) => {
@@ -108,6 +115,7 @@ const recordStartAction = (dispatch) => {
 		startVibrate(70);
 
 		let payload = {
+			recodingNow: true,
 			recordDone: false,
 			audioFilename: "",
 			audioUrl: "",
@@ -118,8 +126,6 @@ const recordStartAction = (dispatch) => {
 		return 0;
 	};
 };
-
-let audio = null;
 
 const recordStopAction = (dispatch) => {
 	const wait = (a) => dispatch({ type: "SET_LOADING", payload: a });
@@ -132,7 +138,7 @@ const recordStopAction = (dispatch) => {
 		wait(true);
 		const { stopRecord } = recorder;
 
-		audio = await stopRecord().catch((e) => {
+		const audio = await stopRecord().catch((e) => {
 			console.error("audioRecord start error", e);
 			return null;
 		});
@@ -144,9 +150,12 @@ const recordStopAction = (dispatch) => {
 
 		// TODO: use `stim` to create filename
 
+		const fileName = `audio${stim.label}.wav`;
+
 		const payload = {
+			recodingNow: false,
 			recordDone: true,
-			audioFilename: "audio.wav",
+			audioFilename: fileName,
 			audioUrl: audio.audioUrl,
 		};
 
@@ -158,20 +167,37 @@ const recordStopAction = (dispatch) => {
 
 const recordUploadAction = (dispatch) => {
 	const wait = (a) => dispatch({ type: "SET_LOADING", payload: a });
-	return async ({ subjectState }) => {
-		if (!audio) {
-			console.error("record action log:: audio not defined");
-			throw new Error("Upload error");
-		}
+	return async ({ recordState }) => {
 		wait(true);
 
-		const { audioUrl } = audio;
+		const { audioFilename, audioUrl } = recordState;
 
 		// Convert to wav format
 		const audioBuffer = await createAudioBuffer(audioUrl);
 		const wavBlob = toWav(audioBuffer);
 
+		let payload = {
+			uploadingNow: true,
+			uploadDone: false,
+		};
+
+		dispatch({ type: "SET_REC_STATE", payload: payload });
+
+		await firebaseSubjectAudioUpload({
+			fileName: audioFilename,
+			wavBlob: wavBlob,
+		});
+
 		wait(false);
+
+		payload = {
+			uploadingNow: false,
+			uploadDone: true,
+		};
+
+		dispatch({ type: "SET_REC_STATE", payload: payload });
+
+		URL.revokeObjectURL(audioUrl);
 	};
 };
 

@@ -46,12 +46,15 @@ const RecordStep = React.memo(function RecordStep() {
 
 		let i;
 		let nextStimIndex;
+		let up;
 		switch (this.action) {
 			case "next":
+				up = true;
 				i = stimIndex + 1;
 				nextStimIndex = i >= stimTotalCount ? stimTotalCount - 1 : i;
 				break;
 			case "prev":
+				up = false;
 				i = stimIndex - 1;
 				nextStimIndex = i < 0 ? 0 : i;
 				break;
@@ -66,6 +69,7 @@ const RecordStep = React.memo(function RecordStep() {
 			payload: {
 				currentStim: allStims[nextStimIndex],
 				stimIndex: nextStimIndex,
+				recordUpload: up,
 			},
 		});
 	}

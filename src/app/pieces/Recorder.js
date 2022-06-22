@@ -32,39 +32,62 @@ const classes = {
 		width: "100%",
 	},
 };
-const MAX_REC_DURATION = 121000;
+const MAX_REC_DURATION = 121_000;
 
 const Recorder = React.memo(function Recorder() {
+	const [currSubState] = useDocumentData(currentSubQuery);
+
 	const {
 		state: recordState,
+		recordInitAction,
 		recordStartAction,
 		recordStopAction,
+		recordUploadAction,
 	} = React.useContext(RecordContext);
-
-	const [currSubState] = useDocumentData(currentSubQuery);
 
 	const playerRef = React.useRef();
 	const vizRef = React.useRef();
-	const timeoutRef = React.useRef();
 
-	const handleRecord = () => {
-		clearInterval(timeoutRef.current);
-		if (!recordState.isRecording) {
-			vizRef.current.scrollIntoView(false);
-			// recordStartAction(recordState.inputStream);
-			timeoutRef.current = setTimeout(() => {
-				handleRecStop();
-			}, MAX_REC_DURATION);
-		} else {
-			timeoutRef.current = setTimeout(() => {
-				handleRecStop();
-			}, 250);
+	React.useEffect(() => {
+		if (!currSubState) return;
+		const { recordOn, recordUpload, currentStim } = currSubState;
+		const {
+			audioInputStream,
+			recordDone,
+			recodingNow,
+			uploadingNow,
+			uploadDone,
+		} = recordState;
+
+		if (recordOn) {
+			// Start recording
+			recordStartAction({ audioInputStream, subjectState: currSubState });
+		} else if (recodingNow) {
+			// Stop recording
+			recordStopAction({ stim: currentStim });
 		}
-	};
 
-	const handleRecStop = async () => {
-		// const res = await recordStopAction();
-	};
+		if (
+			!recordOn &&
+			recordDone &&
+			recordUpload &&
+			!uploadingNow &&
+			!uploadDone
+		) {
+			// Upload audio
+			// Reset record state
+			// Revoke audio blob url
+			recordUploadAction({ recordState });
+		}
+
+		return () => {};
+	}, [currSubState]);
+
+	React.useEffect(() => {
+		recordInitAction();
+
+		return () => {};
+	}, []);
 
 	return (
 		<Container maxWidth="sm">
@@ -78,9 +101,11 @@ const Recorder = React.memo(function Recorder() {
 
 				<Card ref={vizRef}>
 					<CardContent sx={classes.cardRoot}>
-						<AudioPlayer {...{ playerRef }} />
+						<AudioPlayer
+							{...{ playerRef, audioUrl: recordState.audioUrl }}
+						/>
 
-						<>
+						{/* <>
 							<Box sx={classes.buttonRoot}>
 								<IconButton size="large">
 									<ArrowBackIosIcon />
@@ -92,7 +117,7 @@ const Recorder = React.memo(function Recorder() {
 									<ArrowForwardIosIcon />
 								</IconButton>
 							</Box>
-						</>
+						</> */}
 					</CardContent>
 				</Card>
 			</Box>
