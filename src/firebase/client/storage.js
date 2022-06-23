@@ -2,8 +2,12 @@ import { st } from "../creds/client";
 import { ref, uploadBytes } from "firebase/storage";
 import { AUDIO_DATA_FOLDER } from "../creds/setup";
 
-export const firebaseSubjectAudioUpload = async ({ fileName, wavBlob }) => {
-	const path = `${AUDIO_DATA_FOLDER}/${fileName}`;
+export const firebaseSubjectAudioUpload = async ({
+	folder,
+	fileName,
+	wavBlob,
+}) => {
+	const path = `${AUDIO_DATA_FOLDER}/${folder}/${fileName}`;
 	const storageRef = ref(st, path);
 	const metadata = {
 		contentType: "audio/wav",

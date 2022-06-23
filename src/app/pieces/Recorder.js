@@ -3,6 +3,7 @@ import { Container } from "@mui/system";
 import * as React from "react";
 import { useDocumentData } from "react-firebase-hooks/firestore";
 import { currentSubQuery } from "../../firebase/client/firestore";
+import DeviceType from "../components/DeviceType";
 import InfoDisplay from "../components/InfoDisplay";
 import Wait from "../components/Progress";
 import Spectrum from "../components/Spectrum";
@@ -19,7 +20,7 @@ const classes = {
 	cardRoot: (t) => ({
 		position: "relative",
 		overflow: "hidden",
-		minHeight: 128,
+		minHeight: "30vh",
 		display: "flex",
 		flexDirection: "column",
 		alignItems: "stretch",
@@ -58,7 +59,8 @@ const Recorder = React.memo(function Recorder() {
 
 	React.useEffect(() => {
 		if (!currSubState) return;
-		const { recordOn, recordUpload, currentStim } = currSubState;
+		const { recordOn, recordUpload, currentStim, firebaseId } =
+			currSubState;
 		const {
 			audioInputStream,
 			recordDone,
@@ -72,7 +74,7 @@ const Recorder = React.memo(function Recorder() {
 			recordStartAction({ audioInputStream, subjectState: currSubState });
 		} else if (recordingNow) {
 			// Stop recording
-			recordStopAction({ stim: currentStim });
+			recordStopAction({ info: { ...currentStim, firebaseId } });
 		}
 
 		if (
@@ -92,14 +94,12 @@ const Recorder = React.memo(function Recorder() {
 		// 	uploadingNow,
 		// 	uploadDone,
 		// });
-
-		return () => recordResetAction();
 	}, [currSubState]);
 
 	React.useEffect(() => {
 		recordInitAction();
 
-		return () => {};
+		return () => recordResetAction();
 	}, []);
 
 	return (
@@ -135,6 +135,7 @@ const Recorder = React.memo(function Recorder() {
 						)}
 					</CardContent>
 				</Card>
+				<DeviceType />
 			</Box>
 		</Container>
 	);

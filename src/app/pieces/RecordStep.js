@@ -36,7 +36,7 @@ const RecordStep = React.memo(function RecordStep() {
 			payload: {
 				currentStim: allStims[0],
 				stimIndex: 0,
-				stimTotalCount: Object.keys(allStims).length,
+				stimTotalCount: Object.keys(allStims).length || 1,
 			},
 		});
 	}, [allStims]);

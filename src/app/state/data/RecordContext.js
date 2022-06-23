@@ -23,6 +23,7 @@ const recordInitialState = {
 
 	uploadingNow: false,
 	uploadDone: false,
+	firebaseId: null,
 };
 
 /**
@@ -93,7 +94,7 @@ const recordInitAction = (dispatch) => {
 
 const recordStartAction = (dispatch) => {
 	const wait = (a) => dispatch({ type: "SET_LOADING", payload: a });
-	return async ({ audioInputStream, subjectState }) => {
+	return async ({ audioInputStream }) => {
 		if (!recorder) {
 			wait(true);
 			recorder = await audioRecord(audioInputStream).catch((e) => {
@@ -133,7 +134,7 @@ const recordStartAction = (dispatch) => {
 
 const recordStopAction = (dispatch) => {
 	const wait = (a) => dispatch({ type: "SET_LOADING", payload: a });
-	return async ({ stim }) => {
+	return async ({ info }) => {
 		if (!recorder) {
 			console.error("record action log:: recorder not defined");
 			return -1; // stop
@@ -152,15 +153,16 @@ const recordStopAction = (dispatch) => {
 
 		startVibrate(70);
 
-		// TODO: use `stim` to create filename
-
-		const fileName = `audio${stim.label}.wav`;
+		// TODO: use `info` to create filename
+		const deviceName = localStorage.getItem("deviceName") || "unknown";
+		const fileName = `audio-${info.firebaseId}-${info.label}-${deviceName}.wav`;
 
 		const payload = {
 			recordingNow: false,
 			recordDone: true,
 			audioFilename: fileName,
 			audioUrl: audio.audioUrl,
+			firebaseId: info.firebaseId,
 		};
 
 		dispatch({ type: "SET_REC_STATE", payload: payload });
@@ -174,7 +176,7 @@ const recordUploadAction = (dispatch) => {
 	return async ({ recordState }) => {
 		wait(true);
 
-		const { audioFilename, audioUrl } = recordState;
+		const { audioFilename, audioUrl, firebaseId } = recordState;
 
 		// Convert to wav format
 		const audioBuffer = await createAudioBuffer(audioUrl);
@@ -188,6 +190,7 @@ const recordUploadAction = (dispatch) => {
 		dispatch({ type: "SET_REC_STATE", payload: payload });
 
 		await firebaseSubjectAudioUpload({
+			folder: firebaseId,
 			fileName: audioFilename,
 			wavBlob: wavBlob,
 		});
