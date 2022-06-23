@@ -155,7 +155,7 @@ const recordStopAction = (dispatch) => {
 
 		// TODO: use `info` to create filename
 		const deviceName = localStorage.getItem("deviceName") || "unknown";
-		const fileName = `audio-${info.firebaseId}-${info.label}-${deviceName}.wav`;
+		const fileName = `audio_${info.firebaseId}_${info.label}_${deviceName}_.wav`;
 
 		const payload = {
 			recordingNow: false,

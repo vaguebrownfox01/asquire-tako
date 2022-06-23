@@ -13,6 +13,7 @@ exports.STIM_DOC = `/${this.CONTENT_COLLECTION}/stimulus`;
 exports.SURVEY_DOC = `/${this.CONTENT_COLLECTION}/survey`;
 
 exports.SUB_STATE = "/state/current";
+exports.HEAD_STATE = "/state/head";
 
 // Storage
 exports.STORAGE_BUCKET = "tako-vrx.appspot.com";

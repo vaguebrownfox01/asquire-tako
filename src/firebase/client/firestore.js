@@ -3,6 +3,7 @@ import { db } from "../creds/client";
 
 import { collection, doc, setDoc, updateDoc } from "firebase/firestore";
 import {
+	HEAD_STATE,
 	STIM_DOC,
 	SUBJECT_COLLECTION,
 	SUB_STATE,
@@ -10,9 +11,17 @@ import {
 } from "../creds/setup";
 
 export const currentSubQuery = doc(db, SUB_STATE);
+export const headQuery = doc(db, HEAD_STATE);
 export const questionsQuery = doc(db, SURVEY_DOC);
 export const stimulusQuery = doc(db, STIM_DOC);
 export const subjectsQuery = collection(db, SUBJECT_COLLECTION);
+
+export const firebaseSetHeadCode = async ({ code }) => {
+	await setDoc(doc(db, HEAD_STATE), { code: code }).catch((err) => {
+		console.log("fb firestore error :: ", err);
+		return null;
+	});
+};
 
 export const firebaseCurrentSubjectState = async ({ subjectState }) => {
 	await updateDoc(doc(db, SUB_STATE), subjectState).catch((err) => {
