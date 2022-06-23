@@ -2,6 +2,7 @@ import { Box } from "@mui/material";
 import * as React from "react";
 import { useDocumentData } from "react-firebase-hooks/firestore";
 import { questionsQuery } from "../../firebase/client/firestore";
+import Wait from "../components/Progress";
 import QuestionCard from "../components/QuestionCard";
 
 import { SubjectContext } from "../state/data/SubjectContext";
@@ -44,7 +45,7 @@ const QuestionStep = React.memo(function QuestionStep() {
 					}}
 				/>
 			) : (
-				<h3>Loading</h3>
+				<Wait />
 			)}
 		</Box>
 	);

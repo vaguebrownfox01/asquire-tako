@@ -1,9 +1,10 @@
-import { Box, Card, CardContent } from "@mui/material";
+import { Box, Card, CardContent, CircularProgress } from "@mui/material";
 import { Container } from "@mui/system";
 import * as React from "react";
 import { useDocumentData } from "react-firebase-hooks/firestore";
 import { currentSubQuery } from "../../firebase/client/firestore";
 import InfoDisplay from "../components/InfoDisplay";
+import Wait from "../components/Progress";
 import Spectrum from "../components/Spectrum";
 import StimCard from "../components/StimCard";
 import useContainerDimensions from "../hooks/useContainerDimensions";
@@ -13,6 +14,7 @@ const classes = {
 	boxRoot: {
 		display: "flex",
 		flexDirection: "column",
+		alignItems: "stretch",
 	},
 	cardRoot: (t) => ({
 		position: "relative",
@@ -34,7 +36,8 @@ const classes = {
 		width: "100%",
 	},
 };
-const MAX_REC_DURATION = 121_000;
+
+// const MAX_REC_DURATION = 121_000;
 
 const Recorder = React.memo(function Recorder() {
 	const [currSubState] = useDocumentData(currentSubQuery);
@@ -45,6 +48,7 @@ const Recorder = React.memo(function Recorder() {
 		recordStartAction,
 		recordStopAction,
 		recordUploadAction,
+		recordResetAction,
 	} = React.useContext(RecordContext);
 
 	const playerRef = React.useRef();
@@ -89,7 +93,7 @@ const Recorder = React.memo(function Recorder() {
 		// 	uploadDone,
 		// });
 
-		return () => {};
+		return () => recordResetAction();
 	}, [currSubState]);
 
 	React.useEffect(() => {
@@ -101,11 +105,13 @@ const Recorder = React.memo(function Recorder() {
 	return (
 		<Container maxWidth="sm">
 			<Box sx={classes.boxRoot}>
-				{currSubState && (
+				{currSubState ? (
 					<>
 						<InfoDisplay info={currSubState} />
 						<StimCard subjectInfo={currSubState} />
 					</>
+				) : (
+					<Wait />
 				)}
 
 				<Card sx={{ position: "relative", marginTop: 1 }} ref={vizRef}>
@@ -127,20 +133,6 @@ const Recorder = React.memo(function Recorder() {
 								}}
 							/>
 						)}
-
-						{/* <>
-							<Box sx={classes.buttonRoot}>
-								<IconButton size="large">
-									<ArrowBackIosIcon />
-								</IconButton>
-								<IconButton size="large" onClick={handleRecord}>
-									<RadioButtonCheckedIcon color="secondary" />
-								</IconButton>
-								<IconButton size="large">
-									<ArrowForwardIosIcon />
-								</IconButton>
-							</Box>
-						</> */}
 					</CardContent>
 				</Card>
 			</Box>

@@ -205,6 +205,22 @@ const recordUploadAction = (dispatch) => {
 	};
 };
 
+const recordResetAction = (dispatch) => {
+	const wait = (a) => dispatch({ type: "SET_LOADING", payload: a });
+	return async () => {
+		wait(true);
+
+		dispatch({ type: "SET_REC_STATE", payload: { ...recordInitialState } });
+
+		if (recorder) {
+			recorder.stopRecord().catch(() => null);
+			recorder = null;
+		}
+
+		wait(false);
+	};
+};
+
 const recordSetRemoteStateAction = (dispatch) => {
 	const wait = (a) => dispatch({ type: "SET_LOADING", payload: a });
 	return async ({ subjectState, recordState }) => {
@@ -228,6 +244,7 @@ export const { Context: RecordContext, Provider: RecordProvider } =
 			recordStartAction,
 			recordStopAction,
 			recordUploadAction,
+			recordResetAction,
 			recordSetRemoteStateAction,
 		},
 		recordInitialState

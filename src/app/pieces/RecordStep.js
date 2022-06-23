@@ -6,6 +6,7 @@ import {
 	stimulusQuery,
 } from "../../firebase/client/firestore";
 import InfoDisplay from "../components/InfoDisplay";
+import Wait from "../components/Progress";
 import RecordCard from "../components/RecordCard";
 import StimCard from "../components/StimCard";
 import { SubjectContext } from "../state/data/SubjectContext";
@@ -85,7 +86,7 @@ const RecordStep = React.memo(function RecordStep() {
 					/>
 				</>
 			) : (
-				<h3>Loading...</h3>
+				<Wait />
 			)}
 		</Box>
 	);

@@ -8,6 +8,7 @@ import ListItemText from "@mui/material/ListItemText";
 import * as React from "react";
 import { useCollectionData } from "react-firebase-hooks/firestore";
 import { subjectsQuery } from "../../firebase/client/firestore";
+import Wait from "../components/Progress";
 import { SubjectContext } from "../state/data/SubjectContext";
 
 const SubjectList = React.memo(function SubjectList() {
@@ -24,7 +25,7 @@ const SubjectList = React.memo(function SubjectList() {
 	}
 	return (
 		<Box>
-			{subjectList && (
+			{subjectList ? (
 				<List
 					sx={{
 						width: "100%",
@@ -67,6 +68,8 @@ const SubjectList = React.memo(function SubjectList() {
 						</ListItemButton>
 					</ListItem>
 				</List>
+			) : (
+				<Wait />
 			)}
 		</Box>
 	);
