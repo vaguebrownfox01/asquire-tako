@@ -44,7 +44,7 @@ const step = {
 	SUB_RECD: 3,
 };
 
-const Steps = React.memo(function Steps() {
+const Steps = React.memo(function Steps({ admin }) {
 	const { state: subjectState, subjectFirebaseUpdateAction } =
 		React.useContext(SubjectContext);
 
@@ -78,11 +78,12 @@ const Steps = React.memo(function Steps() {
 
 	const handleNext = () => {
 		if (activeStep === step.SUB_LIST) {
-			subjectFirebaseUpdateAction({ subjectState });
+			subjectFirebaseUpdateAction({
+				subjectState: { ...subjectState, admin: admin?.email },
+			});
 		} else {
 			subjectFirebaseUpdateAction({ subjectState, action: "update" });
 		}
-
 		setActiveStep((prevActiveStep) => prevActiveStep + 1);
 	};
 
@@ -91,7 +92,7 @@ const Steps = React.memo(function Steps() {
 	};
 
 	const handleReset = () => {
-		setActiveStep(0);
+		setActiveStep(step.SUB_INFO);
 	};
 
 	const classes = {

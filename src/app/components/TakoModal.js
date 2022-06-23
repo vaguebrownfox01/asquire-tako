@@ -5,6 +5,7 @@ import {
 	Card,
 	CardContent,
 	Modal,
+	TextField,
 	Typography,
 } from "@mui/material";
 import * as React from "react";
@@ -29,6 +30,11 @@ const classes = {
 };
 
 const TakoModal = React.memo(function TakoModal({ open, handleTakoMode }) {
+	const [authInfo, setAuthInfo] = React.useState({ uid: "", passkey: "" });
+	function handleTextInput({ target }) {
+		const { value } = target;
+		setAuthInfo((p) => ({ ...p, [this.key]: value }));
+	}
 	return (
 		<Modal
 			open={open}
@@ -44,19 +50,54 @@ const TakoModal = React.memo(function TakoModal({ open, handleTakoMode }) {
 							component="div"
 							gutterBottom
 						>
-							{`Tako Mode`}
+							{`Tako`}
 						</Typography>
 					</Box>
+					<>
+						<TextField
+							sx={{ marginBottom: 2 }}
+							label="who?"
+							id="login-id"
+							placeholder="your id"
+							size="small"
+							variant="standard"
+							autoComplete="on"
+							fullWidth
+							value={authInfo.uid}
+							onChange={handleTextInput.bind({ key: "uid" })}
+						/>
+						<TextField
+							sx={{ marginBottom: 2 }}
+							label="passkey"
+							id="passkey"
+							placeholder="enter passkey"
+							size="small"
+							autoComplete="on"
+							type="password"
+							fullWidth
+							value={authInfo.passkey}
+							onChange={handleTextInput.bind({ key: "passkey" })}
+						/>
+					</>
 					<ButtonGroup
+						sx={{ marginTop: 2 }}
 						variant="contained"
 						aria-label="outlined primary button group"
 						fullWidth
 					>
-						<Button onClick={handleTakoMode.bind({ type: "head" })}>
+						<Button
+							onClick={handleTakoMode.bind({
+								type: "head",
+								...authInfo,
+							})}
+						>
 							Head
 						</Button>
 						<Button
-							onClick={handleTakoMode.bind({ type: "leg" })}
+							onClick={handleTakoMode.bind({
+								type: "leg",
+								...authInfo,
+							})}
 							variant="outlined"
 						>
 							Leg
