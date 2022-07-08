@@ -1,4 +1,4 @@
-import { Box, Card, CardContent, CircularProgress } from "@mui/material";
+import { Box, Card, CardContent } from "@mui/material";
 import { Container } from "@mui/system";
 import * as React from "react";
 import { useDocumentData } from "react-firebase-hooks/firestore";
@@ -84,16 +84,16 @@ const Recorder = React.memo(function Recorder() {
 			!uploadingNow &&
 			!uploadDone
 		) {
-			recordUploadAction({ recordState });
+			recordUploadAction({ ...recordState });
 		}
 
-		// console.log({
-		// 	recordOn,
-		// 	recordDone,
-		// 	recordUpload,
-		// 	uploadingNow,
-		// 	uploadDone,
-		// });
+		console.log({
+			recordOn,
+			recordDone,
+			recordUpload,
+			uploadingNow,
+			uploadDone,
+		});
 	}, [currSubState]);
 
 	React.useEffect(() => {
@@ -135,7 +135,7 @@ const Recorder = React.memo(function Recorder() {
 						)}
 					</CardContent>
 				</Card>
-				<DeviceType />
+				<DeviceType {...{ recordState }} />
 			</Box>
 		</Container>
 	);
