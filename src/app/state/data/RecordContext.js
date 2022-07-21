@@ -24,6 +24,8 @@ const recordInitialState = {
 	uploadingNow: false,
 	uploadDone: false,
 	firebaseId: null,
+
+	statusCode: "idle",
 };
 
 /**
@@ -80,6 +82,8 @@ const recordInitAction = (dispatch) => {
 			audioUrl: "",
 
 			uploadDone: false,
+
+			statusCode: "idle",
 		};
 
 		dispatch({
@@ -124,6 +128,8 @@ const recordStartAction = (dispatch) => {
 			audioUrl: "",
 
 			uploadDone: false,
+
+			statusCode: "recordingNow",
 		};
 
 		dispatch({ type: "SET_REC_STATE", payload: payload });
@@ -163,6 +169,8 @@ const recordStopAction = (dispatch) => {
 			audioFilename: fileName,
 			audioUrl: audio.audioUrl,
 			firebaseId: info.firebaseId,
+
+			statusCode: "recordingDone",
 		};
 
 		dispatch({ type: "SET_REC_STATE", payload: payload });
@@ -173,7 +181,7 @@ const recordStopAction = (dispatch) => {
 
 const recordUploadAction = (dispatch) => {
 	const wait = (a) => dispatch({ type: "SET_LOADING", payload: a });
-	return async ({ recordState }) => {
+	return async (recordState) => {
 		wait(true);
 
 		const { audioFilename, audioUrl, firebaseId } = recordState;
@@ -185,14 +193,19 @@ const recordUploadAction = (dispatch) => {
 		let payload = {
 			uploadingNow: true,
 			uploadDone: false,
+
+			statusCode: "uploadingNow",
 		};
 
 		dispatch({ type: "SET_REC_STATE", payload: payload });
+
+		const deviceName = localStorage.getItem("deviceName") || "unknown";
 
 		await firebaseSubjectAudioUpload({
 			folder: firebaseId,
 			fileName: audioFilename,
 			wavBlob: wavBlob,
+			deviceName: deviceName,
 		});
 
 		wait(false);
@@ -200,6 +213,8 @@ const recordUploadAction = (dispatch) => {
 		payload = {
 			uploadingNow: false,
 			uploadDone: true,
+
+			statusCode: "uploadDone",
 		};
 
 		dispatch({ type: "SET_REC_STATE", payload: payload });
