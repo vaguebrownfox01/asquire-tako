@@ -40,9 +40,11 @@ const StimCard = React.memo(function StimCard({
 						)}
 					</Typography>
 				</Box>
-				<Typography sx={{ textAlign: "center" }} variant="caption">
-					{`${parseInt(stimIndex) + 1}/${stimTotalCount}`}
-				</Typography>
+				{wait && (
+					<Typography sx={{ textAlign: "center" }} variant="caption">
+						{`${parseInt(stimIndex) + 1}/${stimTotalCount}`}
+					</Typography>
+				)}
 			</CardContent>
 			{statusCode && <Status statusCode={statusCode} />}
 		</Card>
