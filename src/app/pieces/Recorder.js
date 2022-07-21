@@ -57,6 +57,8 @@ const Recorder = React.memo(function Recorder() {
 
 	const { width, height } = useContainerDimensions(vizRef, recordState);
 
+	const [upWait, setUpWait] = React.useState(false);
+
 	React.useEffect(() => {
 		if (!currSubState) return;
 		const { recordOn, recordUpload, currentStim, firebaseId } =
@@ -84,7 +86,7 @@ const Recorder = React.memo(function Recorder() {
 			!uploadingNow &&
 			!uploadDone
 		) {
-			recordUploadAction({ ...recordState });
+			recordUploadAction({ ...recordState, firebaseId });
 		}
 
 		console.log({
@@ -98,9 +100,15 @@ const Recorder = React.memo(function Recorder() {
 
 	React.useEffect(() => {
 		recordInitAction();
-
 		return () => recordResetAction();
 	}, []);
+
+	React.useEffect(() => {
+		const { uploadingNow } = recordState;
+
+		let upWaitStatus = uploadingNow;
+		setUpWait(upWaitStatus);
+	}, [recordState]);
 
 	return (
 		<Container maxWidth="sm">
@@ -108,7 +116,11 @@ const Recorder = React.memo(function Recorder() {
 				{currSubState ? (
 					<>
 						<InfoDisplay info={currSubState} />
-						<StimCard subjectInfo={currSubState} />
+						<StimCard
+							subjectInfo={currSubState}
+							statusCode={recordState.statusCode}
+							wait={upWait}
+						/>
 					</>
 				) : (
 					<Wait />
