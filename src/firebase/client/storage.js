@@ -6,8 +6,9 @@ export const firebaseSubjectAudioUpload = async ({
 	folder,
 	fileName,
 	wavBlob,
+	deviceName,
 }) => {
-	const path = `${AUDIO_DATA_FOLDER}/${folder}/${fileName}`;
+	const path = `${AUDIO_DATA_FOLDER}/${folder}/${deviceName}/${fileName}`;
 	const storageRef = ref(st, path);
 	const metadata = {
 		contentType: "audio/wav",
