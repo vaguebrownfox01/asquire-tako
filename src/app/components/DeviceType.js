@@ -81,7 +81,7 @@ const DeviceType = React.memo(function DeviceType({
 	React.useEffect(() => {
 		const dev = localStorage.getItem("deviceName") || "";
 		setDeviceName(dev);
-		// isSet(dev);
+		// isSet(!!dev);
 	}, []);
 
 	return (
