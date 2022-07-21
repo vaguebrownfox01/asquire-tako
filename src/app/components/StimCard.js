@@ -1,6 +1,7 @@
 import { Box, Card, CardContent, Typography } from "@mui/material";
 import * as React from "react";
 import ReactMarkdown from "react-markdown";
+import Status from "./Status";
 
 const classes = {
 	cardRoot: (t) => ({
@@ -10,13 +11,18 @@ const classes = {
 		marginBottom: 1,
 		minHeight: 172,
 	}),
+	statusBox: {},
 	imgRoot: (t) => ({ height: 128, width: 128, margin: t.spacing(2, "auto") }),
 };
 
-const StimCard = React.memo(function StimCard({ subjectInfo }) {
+const StimCard = React.memo(function StimCard({
+	subjectInfo,
+	statusCode,
+	wait,
+}) {
 	const { currentStim, stimIndex, stimTotalCount } = subjectInfo;
 	return (
-		<Card>
+		<Card sx={{ position: "relative" }}>
 			<CardContent sx={classes.cardRoot}>
 				<Box>
 					<Typography
@@ -25,15 +31,20 @@ const StimCard = React.memo(function StimCard({ subjectInfo }) {
 						component="div"
 						gutterBottom
 					>
-						<ReactMarkdown>
-							{currentStim?.description}
-						</ReactMarkdown>
+						{wait ? (
+							`Uploading! Wait...`
+						) : (
+							<ReactMarkdown>
+								{currentStim?.description}
+							</ReactMarkdown>
+						)}
 					</Typography>
 				</Box>
 				<Typography sx={{ textAlign: "center" }} variant="caption">
 					{`${parseInt(stimIndex) + 1}/${stimTotalCount}`}
 				</Typography>
 			</CardContent>
+			{statusCode && <Status statusCode={statusCode} />}
 		</Card>
 	);
 });
