@@ -62,6 +62,7 @@ const TakoModal = React.memo(function TakoModal({ open, handleTakoMode }) {
 							size="small"
 							variant="standard"
 							autoComplete="on"
+							autoCapitalize="off"
 							fullWidth
 							value={authInfo.uid}
 							onChange={handleTextInput.bind({ key: "uid" })}
