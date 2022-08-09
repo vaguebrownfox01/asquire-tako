@@ -61,6 +61,7 @@ const subjectInitialState = {
 
 	allQuestions: null,
 	currentQuestion: {
+		loading: true,
 		qno: 1,
 		question: "Question?",
 		options: ["Option 1", "Option 2"],
@@ -70,9 +71,12 @@ const subjectInitialState = {
 	questionDone: false,
 
 	allStims: null,
+	stimIndex: 0,
 	stimCount: 0,
 	stimLength: 0,
+	stimTotalCount: 0,
 	currentStim: {
+		loading: true,
 		label: "sents",
 		tag: "sent",
 		skipScore: 1,

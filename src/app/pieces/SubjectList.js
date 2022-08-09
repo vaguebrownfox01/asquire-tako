@@ -23,6 +23,7 @@ const SubjectList = React.memo(function SubjectList() {
 			action: this.action,
 		});
 	}
+
 	return (
 		<Box>
 			{subjectList ? (
