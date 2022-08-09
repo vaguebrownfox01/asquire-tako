@@ -122,13 +122,21 @@ const stimArray = [
 			"Take a deep breath in and say '**Zzzzzzz**' as in 'Pi**zz**a' until you're out of breath. **Repeat 3 times**",
 	},
 	{
-		label: "cough",
-		tag: "cough",
+		label: "cough2",
+		tag: "cough2",
 		imageLink: "",
 		audioDescriptionLink:
 			"https://firebasestorage.googleapis.com/v0/b/asquire-ch3oh.appspot.com/o/instructions_audio%2Fcough.WAV?alt=media&token=1bfdc549-bc07-42d9-aa2b-b7e016f541f4",
 
 		description: "Record your **cough** again. **Repeat 3 times**",
+	},
+	{
+		label: "done",
+		tag: "done",
+		imageLink: "",
+		audioDescriptionLink: "",
+
+		description: "You are done for the day!",
 	},
 ];
 
