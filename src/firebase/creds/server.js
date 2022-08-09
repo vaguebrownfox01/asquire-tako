@@ -1,9 +1,22 @@
-var admin = require("firebase-admin");
-var config = require("./server-tako-vrx.json");
+const { DATABASE_URL, SERVER_CONFIG_PATH } = require("./setup");
 
-const { DATABASE_URL } = require("./setup");
+const {
+	initializeApp,
+	applicationDefault,
+	cert,
+} = require("firebase-admin/app");
 
-admin.initializeApp({
-	credential: admin.credential.cert(config),
+const {
+	getFirestore,
+	Timestamp,
+	FieldValue,
+} = require("firebase-admin/firestore");
+
+process.env["GOOGLE_APPLICATION_CREDENTIALS"] = SERVER_CONFIG_PATH;
+
+initializeApp({
+	credential: applicationDefault(),
 	databaseURL: DATABASE_URL,
 });
+
+exports.server_db = getFirestore();
