@@ -8,6 +8,7 @@ import {
 	SUBJECT_COLLECTION,
 	SUB_STATE,
 	SURVEY_DOC,
+	USER_UUID_LEN,
 } from "../creds/setup";
 
 export const currentSubQuery = doc(db, SUB_STATE);
@@ -44,5 +45,5 @@ export const firebaseSubjectAdd = async ({ subjectState }) => {
 
 const getId = (name = "") => {
 	let id = name.toLowerCase().replace(/[^a-zA-Z]/g, "");
-	return `${id}-${uuid().slice(0, 8)}`;
+	return `${id}-${uuid().slice(0, USER_UUID_LEN)}`;
 };
