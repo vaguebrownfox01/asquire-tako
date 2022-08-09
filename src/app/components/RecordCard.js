@@ -3,6 +3,7 @@ import NextStimIcon from "@mui/icons-material/ArrowForwardIos";
 import RecordStartIcon from "@mui/icons-material/RadioButtonChecked";
 import RecordStopIcon from "@mui/icons-material/StopCircle";
 import { Box, Card, CardContent, IconButton } from "@mui/material";
+import { green } from "@mui/material/colors";
 import * as React from "react";
 
 const classes = {
@@ -50,6 +51,7 @@ const RecordCard = React.memo(function RecordCard({
 
 						<IconButton
 							disabled={recordOn}
+							sx={{ color: green[400] }}
 							onClick={handleStimChange.bind({ action: "next" })}
 						>
 							<NextStimIcon />
