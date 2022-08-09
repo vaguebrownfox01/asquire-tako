@@ -146,18 +146,20 @@ const subjectReducer = (state, action) => {
 
 // Actions
 const subjectLoadAction = (dispatch) => {
+	const wait = (a) => dispatch({ type: "SET_LOADING", payload: a });
 	return () => {
-		dispatch({ type: "SET_LOADING", payload: true });
+		wait(true);
 
 		console.log("user action log");
 
-		dispatch({ type: "SET_LOADING", payload: false });
+		wait(false);
 	};
 };
 
 const subjectSetAllInfoAction = (dispatch) => {
+	const wait = (a) => dispatch({ type: "SET_LOADING", payload: a });
 	return ({ subjectState, action }) => {
-		dispatch({ type: "SET_LOADING", payload: true });
+		wait(true);
 
 		switch (action) {
 			case "reset":
@@ -170,13 +172,14 @@ const subjectSetAllInfoAction = (dispatch) => {
 				break;
 		}
 
-		dispatch({ type: "SET_LOADING", payload: false });
+		wait(false);
 	};
 };
 
 const subjectSetQuestionAction = (dispatch) => {
+	const wait = (a) => dispatch({ type: "SET_LOADING", payload: a });
 	return ({ allQuestions }) => {
-		dispatch({ type: "SET_LOADING", payload: true });
+		wait(true);
 
 		let payload = {};
 		if (allQuestions) {
@@ -188,13 +191,14 @@ const subjectSetQuestionAction = (dispatch) => {
 
 		dispatch({ type: "SET_QUESTION", payload: payload });
 
-		dispatch({ type: "SET_LOADING", payload: false });
+		wait(false);
 	};
 };
 
 const subjectSetStimsAction = (dispatch) => {
+	const wait = (a) => dispatch({ type: "SET_LOADING", payload: a });
 	return ({ allStims }) => {
-		dispatch({ type: "SET_LOADING", payload: true });
+		wait(true);
 
 		let payload = {};
 		if (allStims) {
@@ -208,7 +212,7 @@ const subjectSetStimsAction = (dispatch) => {
 
 		dispatch({ type: "SET_STIMS", payload: payload });
 
-		dispatch({ type: "SET_LOADING", payload: false });
+		wait(false);
 	};
 };
 
@@ -246,8 +250,9 @@ const subjectSubmitAction = (dispatch) => {
 };
 
 const subjectFirebaseUpdateAction = (dispatch) => {
+	const wait = (a) => dispatch({ type: "SET_LOADING", payload: a });
 	return async ({ subjectState, action, payload }) => {
-		dispatch({ type: "SET_LOADING", payload: true });
+		wait(true);
 
 		let rState = {};
 		switch (action) {
@@ -273,11 +278,11 @@ const subjectFirebaseUpdateAction = (dispatch) => {
 				break;
 		}
 
-		firebaseCurrentSubjectState({
+		await firebaseCurrentSubjectState({
 			subjectState: { ...subjectState, ...rState },
 		});
 
-		dispatch({ type: "SET_LOADING", payload: false });
+		wait(false);
 	};
 };
 
