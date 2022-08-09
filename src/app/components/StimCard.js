@@ -40,7 +40,7 @@ const StimCard = React.memo(function StimCard({
 						)}
 					</Typography>
 				</Box>
-				{wait && (
+				{!wait && (
 					<Typography sx={{ textAlign: "center" }} variant="caption">
 						{`${parseInt(stimIndex) + 1}/${stimTotalCount}`}
 					</Typography>
