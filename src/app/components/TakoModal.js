@@ -9,6 +9,7 @@ import {
 	Typography,
 } from "@mui/material";
 import * as React from "react";
+import { MODE } from "../appconfig/info";
 
 const classes = {
 	modalContent: {
@@ -31,10 +32,12 @@ const classes = {
 
 const TakoModal = React.memo(function TakoModal({ open, handleTakoMode }) {
 	const [authInfo, setAuthInfo] = React.useState({ uid: "", passkey: "" });
+
 	function handleTextInput({ target }) {
 		const { value } = target;
 		setAuthInfo((p) => ({ ...p, [this.key]: value }));
 	}
+
 	return (
 		<Modal
 			open={open}
@@ -88,20 +91,20 @@ const TakoModal = React.memo(function TakoModal({ open, handleTakoMode }) {
 					>
 						<Button
 							onClick={handleTakoMode.bind({
-								type: "head",
+								type: MODE.CONTROL,
 								...authInfo,
 							})}
 						>
-							Head
+							Control
 						</Button>
 						<Button
 							onClick={handleTakoMode.bind({
-								type: "leg",
+								type: MODE.RECORD,
 								...authInfo,
 							})}
 							variant="outlined"
 						>
-							Leg
+							Record
 						</Button>
 					</ButtonGroup>
 				</CardContent>

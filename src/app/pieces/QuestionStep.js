@@ -36,7 +36,7 @@ const QuestionStep = React.memo(function QuestionStep() {
 				flexDirection: "column",
 			}}
 		>
-			{allQuestions ? (
+			{allQuestions && !loading ? (
 				<QuestionCard
 					{...{
 						question: subjectState.currentQuestion,

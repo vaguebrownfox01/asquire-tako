@@ -2,17 +2,18 @@
 exports.PROJECT_ID = "tako-vrx";
 
 // Version code
-exports.VERSION = "01";
+exports.VERSION = "02_vibe-test";
 exports.USER_UUID_LEN = 8;
 
 // Firestore
 exports.DATABASE_URL =
 	"https://tako-vrx-default-rtdb.asia-southeast1.firebasedatabase.app";
-exports.SUBJECT_COLLECTION = "subjects-test";
+exports.SUBJECT_COLLECTION = `subjects-${this.VERSION}`;
 exports.CONTENT_COLLECTION = "content";
 exports.STIM_DOC = `/${this.CONTENT_COLLECTION}/stimulus`;
 exports.SURVEY_DOC = `/${this.CONTENT_COLLECTION}/survey`;
 
+exports.REC_STATE = "/state/record";
 exports.SUB_STATE = "/state/current";
 exports.HEAD_STATE = "/state/head";
 

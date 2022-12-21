@@ -37,7 +37,7 @@ const steps = [
 	},
 ];
 
-const step = {
+const stepCode = {
 	SUB_LIST: 0,
 	SUB_INFO: 1,
 	SUB_QUES: 2,
@@ -48,25 +48,25 @@ const Steps = React.memo(function Steps({ admin }) {
 	const { state: subjectState, subjectFirebaseUpdateAction } =
 		React.useContext(SubjectContext);
 
-	const [activeStep, setActiveStep] = React.useState(step.SUB_LIST);
+	const [activeStep, setActiveStep] = React.useState(stepCode.SUB_LIST);
 
 	const [disable, setDisable] = React.useState(true);
 
 	React.useEffect(() => {
 		switch (activeStep) {
-			case step.SUB_LIST:
+			case stepCode.SUB_LIST:
 				setDisable(false);
 				break;
 
-			case step.SUB_INFO:
+			case stepCode.SUB_INFO:
 				setDisable(!subjectState.infoDone);
 				break;
 
-			case step.SUB_QUES:
+			case stepCode.SUB_QUES:
 				setDisable(!subjectState.questionDone);
 				break;
 
-			case step.SUB_RECD:
+			case stepCode.SUB_RECD:
 				setDisable(true);
 				break;
 
@@ -77,7 +77,7 @@ const Steps = React.memo(function Steps({ admin }) {
 	}, [subjectState, activeStep]);
 
 	const handleNext = () => {
-		if (activeStep === step.SUB_LIST) {
+		if (activeStep === stepCode.SUB_LIST) {
 			subjectFirebaseUpdateAction({
 				subjectState: { ...subjectState, admin: admin?.email },
 			});
@@ -92,7 +92,7 @@ const Steps = React.memo(function Steps({ admin }) {
 	};
 
 	const handleReset = () => {
-		setActiveStep(step.SUB_INFO);
+		setActiveStep(stepCode.SUB_INFO);
 	};
 
 	const classes = {

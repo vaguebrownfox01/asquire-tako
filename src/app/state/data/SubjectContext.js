@@ -51,11 +51,19 @@ const subjectInitialState = {
 	loading: false,
 
 	firebaseId: null,
+
 	subjectName: "",
 	subjectAge: "",
 	subjectWeight: "",
 	subjectHeight: "",
 	subjectGender: "",
+
+	// subjectName: "Test",
+	// subjectAge: "0",
+	// subjectWeight: "0",
+	// subjectHeight: "0",
+	// subjectGender: "Male",
+
 	subjectId: "x",
 	infoDone: false,
 
