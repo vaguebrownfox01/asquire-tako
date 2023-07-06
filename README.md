@@ -43,11 +43,14 @@ Asquire-tako works on any modern browser, follow these steps to use the web appl
 
 ### Screenshots
 
-<img alt="login tako" src="media/tako_app-screen.png" width="256">
-<img alt="login tako" src="media/tako_app-screen-bio.png" width="214">
-<img alt="login tako" src="media/tako_app-screen-ctrl-panel.png" width="214">
+<div>
+    <img alt="login tako" src="media/tako_app-screen.png" width="256">
+    <img alt="login tako" src="media/tako_app-screen-bio.png" width="214">
+    <img alt="login tako" src="media/tako_app-screen-ctrl-panel.png" width="214">
+<div>
 
-<img alt="login tako" src="media/tako-app_screen-tail1.png" width="214">
-<img alt="login tako" src="media/tako_app-screen-rail-rec.png" width="214">
-<img alt="login tako" src="media/tako-app_screen-uploaded.png" width="214">
-
+<div>
+    <img alt="login tako" src="media/tako-app_screen-tail1.png" width="214">
+    <img alt="login tako" src="media/tako_app-screen-rail-rec.png" width="214">
+    <img alt="login tako" src="media/tako-app_screen-uploaded.png" width="214">
+<div>
